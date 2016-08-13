@@ -1,0 +1,420 @@
+# DEFINE DEBUGMODE .F.
+# DEFINE EXPMODE 0
+# DEFINE SELMODE 1
+*On Error Do ErrorHandler With Error( ), ;
+							Message( ), ;
+							Message(1), ;
+							Program( ), ;
+							Lineno(1)
+
+ON SHUTDOWN DO ExitProg
+
+RELEASE ALL EXTENDED
+CLEAR ALL
+SET TALK OFF
+SET HOURS TO 24
+SET DATE TO GERMAN
+SET CENTURY ON 
+SET CONSOLE OFF
+SET RESOURCE OFF 
+SET safety OFF 
+SET REPROCESS TO 3 SECONDS 
+SET DELETED ON 
+SET ESCAPE OFF  
+
+DECLARE INTEGER GetPrivateProfileString IN Win32API  AS GetPrivStr ;
+	STRING cSection, STRING cKey, STRING cDefault, STRING @cBuffer, ;
+	INTEGER nBufferSize, STRING cINIFile
+DECLARE INTEGER WritePrivateProfileString IN Win32API AS WritePrivStr ;
+	STRING cSection, STRING cKey, STRING cValue, STRING cINIFile
+DECLARE INTEGER GetSysColor IN User32.DLL INTEGER
+DECLARE INTEGER ShellExecute IN shell32.dll ;
+	INTEGER hndWin, STRING cAction, STRING cFileName, ;
+	STRING cParams, STRING cDir, INTEGER nShowWin
+
+DECLARE ScreenSize In Tools32 ;
+	Integer @nW, ;  && ÿËËÌ‡
+	Integer @nH     && ¬˚ÒÓÚ‡
+
+PUBLIC fso AS SCRIPTING.FileSystemObject, wshell AS Shell.Application
+
+fso      = CREATEOBJECT('Scripting.FileSystemObject')
+WShell   = CREATEOBJECT('Shell.Application')
+WSHShell = CREATEOBJECT('Wscript.Shell')
+
+SET PROCEDURE TO Utils
+
+PUBLIC nWidth, nHeight, nDifSize, IsNotePad
+m.nWidth    = 0
+m.nHeight   = 0
+m.nDifSize  = 800-768
+
+m.IsNotePad = .F.
+
+=ScreenSize(@nWidth, @nHeight)
+
+m.IsNotePad = IIF(m.nHeight<768, .T., .F.)
+*m.IsNotePad = .T.
+
+WITH _SCREEN
+ .Width      = 1024
+ .Height     = IIF(m.IsNotePad=.f., (800-m.nDifSize)-100, (600-m.nDifSize)-100)
+ .BackColor  = RGB(192,192,192)
+ .AutoCenter = .f.
+ .Picture    = 'lpu2smo.jpg'
+ .Visible    = .t.
+ENDWITH 
+
+lcPathSystem = sys(5) + sys(2003)
+Set DEFAULT TO (lcPathSystem)
+lcPathMain = sys(5) + sys(2003)
+lcPathSystem = lcPathMain+;
+	','+(lcPathMain+'\BITMAPS')+;
+	','+(lcPathMain+'\FORMS')+;
+	','+(lcPathMain+'\GRAPHICS')+;
+	','+(lcPathMain+'\INCLUDE')+;
+	','+(lcPathMain+'\LIBS')+;
+	','+(lcPathMain+'\MENU')+;
+	','+(lcPathMain+'\PROGRAM')
+
+SET PATH TO (lcPathSystem)
+
+PUBLIC paisoms, parc, pbase, pbin, pcommon, pout, ptempl, ptrash, pdouble, pmee, pexpimp, DaemonDir, SpamDir, ;
+ tyear, tmonth, tdat1, tdat2, curlpu, qcod, qmail, qobjid, UserERZ, qname, oMenu, gcPeriod, gcUser, gcFormat,;
+ usrfam, usrim, usrot, usrfio, usrmail, supervisor, pattppl, m.ynorm, IsUsrDir
+
+PUBLIC m.DeadDate, m.IntDate
+m.IntDate={04.09.2016}
+m.DeadDate={01.01.2017}
+
+m.ynorm = 0
+
+PUBLIC ARRAY mes_text[12], mes_main[12]
+mes_text[1]="ˇÌ‚‡ˇ"
+mes_text[2]="ÙÂ‚‡Îˇ"
+mes_text[3]="Ï‡Ú‡"
+mes_text[4]="‡ÔÂÎˇ"
+mes_text[5]="Ï‡ˇ"
+mes_text[6]="Ë˛Ìˇ"
+mes_text[7]="Ë˛Îˇ"
+mes_text[8]="‡‚„ÛÒÚ‡"
+mes_text[9]="ÒÂÌÚˇ·ˇ"
+mes_text[10]="ÓÍÚˇ·ˇ"
+mes_text[11]="ÌÓˇ·ˇ"
+mes_text[12]="‰ÂÍ‡·ˇ"
+
+mes_main[1]="ﬂÌ‚‡¸"
+mes_main[2]="‘Â‚‡Î¸"
+mes_main[3]="Ã‡Ú"
+mes_main[4]="¿ÔÂÎ¸"
+mes_main[5]="Ã‡È"
+mes_main[6]="»˛Ì¸"
+mes_main[7]="»˛Î¸"
+mes_main[8]="¿‚„ÛÒÚ"
+mes_main[9]="—ÂÌÚˇ·¸"
+mes_main[10]="ŒÍÚˇ·¸"
+mes_main[11]="ÕÓˇ·¸"
+mes_main[12]="ƒÂÍ‡·¸"
+
+numlib = adir(alib,lcPathMain+'\LIBS\*.vcx')
+for i = 1 to numlib
+	lcSetLibrary = lcPathMain+'\LIBS\' + alib(i,1)
+	set classlib to (lcSetLibrary) additive
+endfor
+
+*lcSetLibrary = lcPathMain+'\LIBS\vfpcompression.fll'
+*SET LIBRARY TO &lcPathMain\LIBS\vfpcompression
+SET LIBRARY TO &lcPathMain\vfpzip
+SET LIBRARY TO &lcPathMain\vfpexmapi ADDITIVE
+
+*lcSetLibrary = lcPathMain+'\LIBS\vfpexmapi.fll'
+*SET LIBRARY TO (lcSetLibrary) ADDITIVE 
+
+IF CfgBase() = -1
+ =ExitProg()
+ENDIF 
+
+IF m.qcod='S6' AND DATE()>m.DeadDate
+ =ExitProg()
+ENDIF 
+
+IF !fso.FolderExists(pcommon)
+ MESSAGEBOX(CHR(13)+CHR(10)+'Œ“—”“—“¬”≈“ »À» Õ≈ƒŒ—“”œÕ¿'+CHR(13)+CHR(10)+'ƒ»–≈ “Œ–»ﬂ '+pcommon,0+16,'')
+ =ExitProg()
+ENDIF  
+
+m.tdat1 = CTOD('01.'+PADL(tMonth,2,'0')+'.'+PADL(tYear,4,'0'))
+m.tdat2 = GOMONTH(CTOD('01.'+PADL(tMonth,2,'0')+'.'+PADL(tYear,4,'0')),1)-1
+m.gcPeriod = STR(tYear,4)+PADL(tMonth,2,'0')
+
+DO CASE 
+ CASE m.qcod == 'P2'
+  m.qname = '¿Œ "Ã—  "”–¿À—»¡"'
+  m.qmail = 'skpomed.msk.oms'
+  m.qobjid = 3386
+ CASE m.qcod == 'P3'
+  m.qname = 'ŒŒŒ Ã—Œ "œ¿Õ¿÷≈ﬂ" ÃŒ— Œ¬— »… ‘»À»¿À'
+  m.qmail = 'panacea.msk.oms'
+  m.qobjid = 5387
+ CASE m.qcod == 'I3'
+  m.qname = 'ŒŒŒ —  "»Õ√Œ——“–¿’-Ã"'
+  m.qmail = 'ingos.msk.oms'
+  m.qobjid = 5398
+ CASE m.qcod == 'I1'
+  m.qname = 'ŒŒŒ Ã—  "» ¿–"'
+  m.qmail = 'ikar.msk.oms'
+  m.qobjid = 110
+ CASE m.qcod == 'R4'
+  m.qname = 'ŒŒŒ "—“–¿’Œ¬¿ﬂ Ã≈ƒ»÷»Õ— ¿ﬂ  ŒÃœ¿Õ»ﬂ –≈—Œ-Ã≈ƒ" ÃŒ— Œ¬— »… ‘»À»¿À'
+  m.qmail = 'reso.msk.oms'
+  m.qobjid = 3415
+ CASE m.qcod == 'S7'
+  m.qname = '¿Œ —  "—Œ√¿«-ÃÂ‰"'
+  m.qmail = 'sogaz.msk.oms'
+  m.qobjid = 5400
+ CASE m.qcod == 'S2'
+  m.qname = '¿Œ ¬“¡ ÃÂ‰ËˆËÌÒÍÓÂ ÒÚ‡ıÓ‚‡ÌËÂ'
+  m.qmail = 'sovita.msk.oms'
+  m.qobjid = 33
+ CASE m.qcod == 'S6'
+  m.qname = '«¿Œ —  "—Œ√À¿—»≈-Ã"'
+  m.qmail = 'soglasie.msk.oms'
+  m.qobjid = 5404
+ CASE m.qcod == 'R8'
+  m.qname = '–√—'
+  m.qmail = 'rgs.msk.oms'
+  m.qobjid = 5405
+ OTHERWISE 
+  m.qname = 'Œ¿Œ "Ã—  "”–¿À—»¡"'
+  m.qmail = 'skpomed.msk.oms'
+  m.qobjid = 3386
+ENDCASE 
+
+public goApp
+goApp = NEWOBJECT('_goapp','main')
+
+ADDPROPERTY(goApp, "regim", 0)
+ADDPROPERTY(goApp, "mcod", "")
+ADDPROPERTY(goApp, "filial", "")
+ADDPROPERTY(goApp, "vfilter", "")
+ADDPROPERTY(goApp, "keypressed", "")
+ADDPROPERTY(goApp, "tipacc", 0)
+ADDPROPERTY(goApp, "flcod", "")
+ADDPROPERTY(goApp, "Aisoms", "")
+ADDPROPERTY(goApp, "People", "")
+ADDPROPERTY(goApp, "Talon", "")
+ADDPROPERTY(goApp, "eError", "")
+ADDPROPERTY(goApp, "mError", "")
+ADDPROPERTY(goApp, "lcDir", "")
+ADDPROPERTY(goApp, "pPath", "")
+*ADDPROPERTY(goApp, "etap", " ")
+ADDPROPERTY(goApp, "etap", "2")
+ADDPROPERTY(goApp, "docexp", "")
+ADDPROPERTY(goApp, "nrecid", 0)
+ADDPROPERTY(goApp, "supexp", SPACE(7))
+ADDPROPERTY(goApp, "smoexp", SPACE(7))
+ADDPROPERTY(goApp, "profil", SPACE(3))
+ADDPROPERTY(goApp, "tiplpu", 0)
+ADDPROPERTY(goApp, "tipacc", 0)
+ADDPROPERTY(goApp, "exporsel", EXPMODE)
+ADDPROPERTY(goApp, "d_exp", {})
+
+
+*goApp.Show()
+goApp.Begin_process()
+
+=chkbase()
+
+IF !fso.FileExists(pCommon+'\Users.cdx')
+ IF OpenFile(pcommon+'\Users', 'users', 'excl') <= 0
+  SELECT Users 
+  INDEX ON name TAG name 
+  USE 
+ ENDIF 
+ENDIF 
+
+IF !fso.FileExists(pCommon+'\pnyear.dbf')
+ CREATE TABLE &pCommon\pnyear (period c(6), pnorm n(13,2))
+ INDEX on period TAG period 
+ SET ORDER TO period
+ INSERT INTO pnyear (period, pnorm) VALUES ('2013', 9594.08) 
+ INSERT INTO pnyear (period, pnorm) VALUES ('2014', 11321.33) 
+ INSERT INTO pnyear (period, pnorm) VALUES ('2015', 13191.01) 
+ USE 
+ELSE 
+ IF OpenFile(pCommon+'\pnyear', 'pnyear', 'shar', 'period')>0
+  IF USED('pnyear')
+   USE IN pnyear
+  ENDIF 
+ ELSE 
+  SELECT pnyear
+  IF SEEK(STR(tYear,4), 'pnyear')
+   m.ynorm = pnyear.pnorm
+  ENDIF 
+  IF USED('pnyear')
+   USE IN pnyear
+  ENDIF 
+ ENDIF 
+ENDIF 
+
+=OpenFile(pCommon+'\Users', 'Users', 'shar', 'name')
+SELECT Users
+IF !SEEK(m.gcUser, 'Users')
+ USE 
+ MESSAGEBOX('»Ãﬂ '+ALLTRIM(m.gcUser)+' Œ“—”“—“¬”≈“ ¬ —œ–¿¬Œ◊Õ» ≈!', 0+16, '')
+ =ExitProg()
+ELSE 
+ IF !RLOCK()
+  USE 
+  MESSAGEBOX('œŒÀ‹«Œ¬¿“≈À‹ '+ALLTRIM(m.gcUser)+' ”∆≈ –¿¡Œ“¿≈“ ¬ —»—“≈Ã≈!', 0+16, '')
+  =ExitProg()
+ ELSE 
+  m.usrfam  = ALLTRIM(Fam)
+  m.usrim   = ALLTRIM(im)
+  m.usrot   = ALLTRIM(ot)
+  m.usrfio  = ALLTRIM(fio)
+  m.usrmail = ALLTRIM(usrmail)
+*  m.supervisor = super
+ ENDIF 
+ENDIF 
+
+goApp.smoexp = m.gcUser
+
+=OpenFile(pCommon+'\smo', 'smo', 'shar')
+SELECT smo
+IF VARTYPE(chieftip) != 'C'
+ USE 
+ IF OpenFile(pCommon+'\smo', 'smo', 'excl')<=0
+  SELECT smo
+  ALTER TABLE smo ADD COLUMN chieftip c(100)
+  USE 
+ ENDIF 
+ =OpenFile(pCommon+'\smo', 'smo', 'shar')
+ SELECT smo
+ENDIF 
+IF VARTYPE(chiefname) != 'C'
+ USE 
+ IF OpenFile(pCommon+'\smo', 'smo', 'excl')<=0
+  SELECT smo
+  ALTER TABLE smo ADD COLUMN chiefname c(100)
+  USE 
+ ENDIF 
+ =OpenFile(pCommon+'\smo', 'smo', 'shar')
+ SELECT smo
+ENDIF 
+IF VARTYPE(buhtip) != 'C'
+ USE 
+ IF OpenFile(pCommon+'\smo', 'smo', 'excl')<=0
+  SELECT smo
+  ALTER TABLE smo ADD COLUMN buhtip c(100)
+  USE 
+ ENDIF 
+ =OpenFile(pCommon+'\smo', 'smo', 'shar')
+ SELECT smo
+ENDIF 
+IF VARTYPE(buhname) != 'C'
+ USE 
+ IF OpenFile(pCommon+'\smo', 'smo', 'excl')<=0
+  SELECT smo
+  ALTER TABLE smo ADD COLUMN buhname c(100)
+  USE 
+ ENDIF 
+ =OpenFile(pCommon+'\smo', 'smo', 'shar')
+ SELECT smo
+ENDIF 
+COUNT FOR v != .f. TO kol_q
+PUBLIC smo(kol_q, 2)
+COPY FOR v != .f. FIELDS code, name TO ARRAY smo
+USE 
+
+SET SYSMENU TO
+SET SYSMENU ON
+SET STATUS BAR ON 
+WITH _SCREEN
+* .Width      = 1024
+* .Height     = 768-100
+* .BackColor  = RGB(192,192,192)
+ .Icon = 'cross.ico'
+* .AutoCenter = .f.
+ .Caption = m.qname+', œŒÀ‹«Œ¬¿“≈À‹: '+ALLTRIM(m.gcUser)+', œ≈–»Œƒ: '+NameOfMonth(tMonth)+' '+STR(tYear,4)+' √Œƒ¿'+;
+  ' (Ò '+DTOC(tdat1)+' ÔÓ '+DTOC(tdat2)+')'
+ENDWITH 
+
+*m.mmy=PADL(tmonth,2,'0')+RIGHT(STR(tyear,4),1)
+*pcommonmmy = pcommon+m.mmy
+*WAIT "—Œ«ƒ¿Õ»≈ ƒ»–≈ “Œ–»» "+pcommonmmy WINDOW NOWAIT 
+*IF !fso.FolderExists (pcommonmmy)
+* fso.CopyFolder(pcommon, pcommonmmy)
+* pcommon = pcommonmmy
+* IF OpenFile(pbin+'\lpu2smo.cfg', 'llpu', 'shar')==0
+*  REPLACE pcommon WITH pcommonmmy
+*  USE 
+* ENDIF 
+*ENDIF 
+*WAIT CLEAR 
+
+PUBLIC IsAdmin
+m.IsAdmin=.f.
+IF fso.FileExists(pbin+'\admin')
+ ffile = fso.GetFile(pbin+'\admin')
+  IF ffile.size == 4
+   fhandl = ffile.OpenAsTextStream
+   lcHead = fhandl.Read(4)
+   fhandl.Close
+*   MESSAGEBOX(lcHead,0+64,'')
+   IF lcHead == 'ruby'
+    m.IsAdmin = .t.
+   ENDIF 
+  ENDIF 
+ENDIF 
+
+*DO DelSpareFiles
+
+*DO o_menu
+DO m_menu
+*DO demomenu1
+ 
+READ EVENTS
+
+=ExitProg()
+
+*Clear all
+*RELEASE ALL EXTENDED
+
+FUNCTION ExitProg
+ IF USED('Users')
+  USE IN Users
+ ENDIF 
+ RELEASE m.oError && ???
+* #IF DEBUGMODE
+**  _SCREEN.Caption = oApp.cOldWindCaption
+*  SET SYSMENU TO DEFAULT
+*  _SCREEN.TitleBar = 1
+*  _SCREEN.WindowState = 2
+*  _SCREEN.LockScreen = .F.
+*  _SCREEN.Picture = ''
+*  _SCREEN.BackColor = RGB(255,255,255)
+**  oApp.ShowToolBars()
+*  SET SYSMENU ON
+* #ELSE
+ _SCREEN.Caption = ""
+* #ENDIF
+* oApp.CloseAllTable()
+* RELEASE m.oApp
+ RELEASE m.goApp
+* #IF !DEBUGMODE
+  ON SHUTDOWN
+  QUIT
+* #ELSE
+*  ON SHUTDOWN
+*  _SCREEN.Icon =""
+*  _SCREEN.FirstStart = .T.
+*  *SET HELP TO
+*  CLEAR ALL
+*  CLOSE ALL
+*  CLEAR PROGRAM
+*  SET SYSMENU NOSAVE
+*  SET SYSMENU TO DEFAULT
+*  SET SYSMENU ON
+* #ENDIF
+RETURN 

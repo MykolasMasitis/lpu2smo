@@ -1,0 +1,7 @@
+screen=off
+STRICTDATE=0
+CENTURY=ON
+DATE=GERMAN
+resource=off
+deleted=on
+TMPFILES=..\TEMP

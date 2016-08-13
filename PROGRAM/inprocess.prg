@@ -1,0 +1,3 @@
+PROCEDURE InProcess
+ REPLACE IsPr WITH !IsPr
+RETURN 

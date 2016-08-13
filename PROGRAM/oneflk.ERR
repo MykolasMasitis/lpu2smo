@@ -1,0 +1,2 @@
+m.ddd = SUBSTR(SUBSTR(m.c_i,AT('#',m.c_i,2)+1,8),7,2)+'.'+SUBSTR(SUBSTR(m.c_i,AT('#',m.c_i,2)+1,8),5,2)+'.'+SUBSTR(SUBSTR(m.c_i,AT('#',m.c_i,2)+1,8),1,4))
+Error in line 619: Syntax error.

@@ -1,0 +1,749 @@
+PROCEDURE ComReind
+
+WAIT "œÂÂËÌ‰ÂÍ‡ˆËˇ COMMON..." WINDOW NOWAIT 
+*IF OpenFile(pCommon+'\UsrLpu', "UsrLpu", "excl") == 0
+* SELECT UsrLpu
+* SET FULLPATH OFF 
+* WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+* INDEX ON mcod TAG mcod
+* INDEX ON lpu_id TAG lpu_id
+* SET FULLPATH OFF 
+* USE
+* WAIT CLEAR 
+*ENDIF
+
+m.lWasUsed = .F.
+IF USED('Users')
+ m.lWasUsed = .T.
+ SELECT Users
+ COUNT FOR ISRLOCKED() TO m.nLocked
+ IF m.nLocked > 0
+  SELECT name FROM Users WHERE !ISRLOCKED() INTO CURSOR wlck
+  SELECT wlck
+  INDEX on name TAG name 
+  SET ORDER TO name 
+ ENDIF 
+ USE IN users
+ENDIF 
+IF OpenFile(pcommon+'\Users', 'users', 'excl') <= 0
+ SELECT Users 
+ INDEX ON name TAG name 
+ USE 
+ENDIF 
+IF m.lWasUsed=.T.
+ =OpenFile(pCommon+'\Users', 'Users', 'shar', 'name')
+ IF USED('wlck')
+  SELECT Users
+  SET RELATION TO name INTO wlck
+  SCAN 
+   IF EMPTY(wlck.name)
+    RLOCK()
+   ENDIF 
+  ENDSCAN 
+  SET RELATION OFF INTO wlck
+  USE IN wlck
+ ENDIF 
+ENDIF 
+
+IF !fso.FileExists(pCommon+'\Users.cdx')
+ IF OpenFile(pcommon+'\Users', 'users', 'excl') <= 0
+  SELECT Users 
+  INDEX ON name TAG name 
+  USE 
+ ENDIF 
+ENDIF 
+
+*IF USED('Users')
+* USE IN users
+*ENDIF 
+*IF OpenFile(pcommon+'\Users', 'users', 'excl') <= 0
+* SELECT Users 
+* INDEX ON name TAG name 
+* USE 
+*ENDIF 
+*IF !USED('Users')
+* =OpenFile(pCommon+'\Users', 'Users', 'shar', 'name')
+*ENDIF 
+
+*IF !fso.FileExists(pCommon+'\Users.cdx')
+* IF OpenFile(pcommon+'\Users', 'users', 'excl') <= 0
+*  SELECT Users 
+*  INDEX ON name TAG name 
+*  USE 
+* ENDIF 
+*ENDIF 
+
+IF OpenFile(pCommon+'\explist', "explist", "excl") == 0
+ SELECT explist
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cod TAG cod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pCommon+'\pnorm', "pnorm", "excl") == 0
+ SELECT pnorm
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON period TAG period
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pcommon+'\prv002xx', "prv002", "excl") == 0
+ SELECT prv002
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON profil TAG profil
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pCommon+'\emails', "emails", "excl") == 0
+ SELECT emails
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON lpu_id TAG lpu_id
+ INDEX ON mcod TAG mcod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pCommon+'\dsdisp', "dsdisp", "excl") == 0
+ SELECT dsdisp
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON lpu_id TAG lpu_id
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pcommon+'\smo', "smo", "excl") == 0
+ SELECT smo
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON code TAG code
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pcommon+'\lpudogs', 'lpudogs', "excl") == 0
+ SELECT lpudogs
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON lpu_id TAG lpu_id
+ INDEX ON mcod TAG mcod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\nsi\'+'errsmee', "errsmee", "excl") == 0
+ SELECT errsmee
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON er_c TAG er_c
+ INDEX on osn230 TAG osn230
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pcommon+'\dspcodes', "dspcodes", "excl") == 0
+ SELECT dspcodes
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cod TAG cod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pcommon+'\exptip', "exptip", "excl") == 0
+ SELECT exptip
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON code TAG code
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+*IF OpenFile(pcommon+'\tpn', "tpn", "excl") == 0
+* SELECT tpn
+* SET FULLPATH OFF 
+* WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+* INDEX ON mcod TAG mcod
+* INDEX on lpuid TAG lpuid
+* SET FULLPATH OFF 
+* USE
+* WAIT CLEAR 
+*ENDIF
+
+IF OpenFile(pbase+'\'+m.gcperiod+'\nsi\pilot', "pilot", "excl") == 0
+ SELECT pilot
+ DELETE TAG ALL 
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON lpu_id TAG lpu_id
+ INDEX ON mcod TAG mcod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pcommon+'\mee2mgf', "mee2mgf", "excl") == 0
+ SELECT mee2mgf
+ DELETE TAG ALL 
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON my_et TAG my_et
+ INDEX ON mgf_et TAG mgf_et
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pcommon+'\usvmpxx', "usvmp", "excl") == 0
+ SELECT usvmp
+ DELETE TAG ALL 
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cod TAG cod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pcommon+'\hopff_xx', "hopff", "excl") == 0
+ SELECT hopff
+ DELETE TAG ALL 
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON codho TAG codho
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pmee+'\ssacts\ssacts', 'ssacts', 'excl') == 0
+ SELECT ssacts
+ DELETE TAG ALL 
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON recid TAG recid 
+ INDEX ON period TAG period
+ INDEX ON mcod TAG mcod 
+ INDEX ON sn_pol TAG sn_pol
+ INDEX ON actdate TAG actdate
+ INDEX ON PADR(ALLTRIM(fam)+' '+LEFT(im,1)+LEFT(ot,1),28) TAG fio 
+ USE
+ENDIF 
+WAIT CLEAR 
+
+IF OpenFile(pmee+'\svacts\svacts', 'svacts', 'excl') == 0
+ SELECT svacts
+ DELETE TAG ALL 
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON recid TAG recid 
+ INDEX ON period TAG period
+ INDEX ON e_period TAG e_period
+ INDEX ON mcod TAG mcod 
+ INDEX ON actdate TAG actdate
+* INDEX ON period+et TAG unik 
+ INDEX ON period+e_period+mcod+STR(codexp,1)+docexp TAG unik
+ USE
+ENDIF 
+
+WAIT CLEAR 
+
+&& œÂÂËÌ‰ÂÍÒ‡ˆËˇ ÎÓÍ‡Î¸ÌÓÈ Õ—»
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\noth', "noth", "excl") == 0
+ SELECT noth
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cod TAG cod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\admokrxx', "admokr", "excl") == 0
+ SELECT admokr
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cokr TAG cokr
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\CodKu', "CodKU", "excl") == 0
+ SELECT codku
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cod TAG cod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\CodOtd', "codotd", "excl") == 0
+ SELECT codotd
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cod FOR kl='#' TAG ncod && “ÓÎ¸ÍÓ ‚ Ú‡ÍËı ÓÚ‰ÂÎÂÌËˇı ˝Ú‡ ÛÒÎÛ¯‡
+ INDEX ON otd FOR kl='y' TAG notd && “ÓÎ¸ÍÓ Ú‡ÍËÂ ÛÒÎÛ„Ë ‚ ˝ÚÓÏ ÓÚ‰ÂÎÂÌËË
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\codwdr', "codwdr", "excl") == 0
+ SELECT codwdr
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cod TAG cod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\hopff', "hopff", "excl") == 0
+ SELECT hopff
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON codho TAG codho
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\isv012', "isv012", "excl") == 0
+ SELECT isv012
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON ishod TAG ishod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\kdolgxx', "kdolg", "excl") == 0
+ SELECT kdolg
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON prvd TAG prvd
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\kpresl', "tips", "excl") == 0
+ SELECT tips
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON tip TAG tip 
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF m.tdat1<{01.05.2014}
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\kspec', "kspec", "excl") == 0
+ SELECT kspec
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON prvs_foms TAG prvs
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+ENDIF 
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\lputpn', "lputpn", "excl") == 0
+ SELECT lputpn
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON lpu_id TAG lpu_id
+ INDEX ON fil_id TAG fil_id 
+ INDEX ON mcod TAG mcod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\horlpu', "horlpu", "excl") == 0
+ SELECT horlpu
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON lpu_id TAG lpu_id
+ INDEX ON fil_id TAG fil_id 
+ INDEX ON mcod TAG mcod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\mkb10', "mkb10", "excl") == 0
+ SELECT mkb10
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON ds TAG ds
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\mo_vmp', "movmp", "excl") == 0
+ SELECT movmp
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON lpu_id TAG lpu_id
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\modpac', "modpac", "excl") == 0
+ SELECT modpac
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON codmod TAG codmod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\ms_mkb', "msmkb", "excl") == 0
+ SELECT msmkb
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON ds TAG ds
+ INDEX ON COD TAG COD
+ INDEX ON STR(cod,6)+' '+ds TAG ds_ms
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\nocodr', "nocodr", "excl") == 0
+ SELECT nocodr
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON LEFT(Ds,1) FOR Maska=1 TAG Ds1
+ INDEX ON LEFT(Ds,2) FOR Maska=2 TAG Ds2
+ INDEX ON LEFT(Ds,3) FOR Maska=3 TAG Ds3
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\osoerzxx', "OsoERZ", "excl") == 0
+ SELECT OsoERZ
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON Ans_r TAG Ans_r
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\osoree', "osoree", "excl") == 0
+ SELECT osoree
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON d_type TAG d_type
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\ososch', "ososch", "excl") == 0
+ SELECT ososch
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON d_type TAG d_type
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\polic_dp', "PolisDP", "excl") == 0
+ SELECT PolisDP
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON sn_pol TAG sn_pol
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\polic_h', "PolisH", "excl") == 0
+ SELECT PolisH
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON sn_pol TAG sn_pol
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\profot', "profot", "excl") == 0
+ SELECT profot
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON otd TAG otd
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\profus', "profus", "excl") == 0
+ SELECT profus
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cod TAG cod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\rsv009', "rsv009", "excl") == 0
+ SELECT rsv009
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON rslt TAG rslt
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\sookodxx', "sookod", "excl") == 0
+ SELECT sookod
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON er_c TAG er_c
+ INDEX ON osn230 TAG osn230
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\SovmNO', "SovmNO", "excl") == 0
+ SELECT SovmNO
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX FOR Kl='#' ON Cod TAG ncod 
+ INDEX FOR Kl='y' ON Cod TAG scod
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\spi_lpu_dd', "spi", "excl") == 0
+ SELECT spi
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON lpu_id TAG lpu_id
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+*IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\spi_cz', "spi", "excl") == 0
+* SELECT spi
+* SET FULLPATH OFF 
+* WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+* INDEX ON lpu_id TAG lpu_id
+* INDEX ON mcod TAG mcod
+* SET FULLPATH OFF 
+* USE
+* WAIT CLEAR 
+*ENDIF
+
+*IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\spi_cz_ch', "spi", "excl") == 0
+* SELECT spi
+* SET FULLPATH OFF 
+* WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+* INDEX ON lpu_id TAG lpu_id
+* INDEX ON mcod TAG mcod
+* SET FULLPATH OFF 
+* USE
+* WAIT CLEAR 
+*ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\spraboxx', "sprabo", "excl") == 0
+ SELECT sprabo
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON abn_name TAG abn_name
+ INDEX ON object_id TAG lpu_id
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\sprlpuxx', "sprlpu", "excl") == 0
+ SELECT sprlpu
+ IF VARTYPE(fil_id) != 'N'
+  ALTER TABLE sprlpu ADD COLUMN fil_id n(6)
+  REPLACE ALL fil_id WITH lpu_id
+ ENDIF 
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+* INDEX ON mcod FOR lpu_id=fil_id and du_in>=m.t_dat1 TAG mcod
+* INDEX FOR lpu_id=fil_id and du_in>=m.tdat1 ON lpu_id TAG lpu_id
+* INDEX FOR lpu_id=fil_id and du_in>=m.tdat1 ON mcod TAG mcod
+* INDEX FOR lpu_id=fil_id and du_in>=m.tdat1 ON cokr TAG cokr
+ INDEX ON lpu_id TAG lpu_id
+ INDEX ON fil_id TAG fil_id
+ INDEX ON mcod TAG mcod
+ INDEX ON cokr TAG cokr
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\spv015', "spv015", "excl") == 0
+ SELECT spv015
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON code TAG code
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\street', "street", "excl") == 0
+ SELECT street
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON ul TAG ul
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\tarifn', "tarifn", "excl") == 0
+ SELECT tarifn
+* m.nIsTrouble = 0
+* COUNT FOR ;
+  (INT(cod/1000)=183 AND stkd != ROUND(tarif/7,2)) OR (INT(cod/1000)=183 AND stkdv != ROUND(tarif_v/7,2));
+   TO m.nIsTrouble
+* IF m.nIsTrouble>0
+*  IF MESSAGEBOX(CHR(13)+CHR(10)+'Œ¡Õ¿–”∆≈Õ¿ œ–Œ¡À≈Ã¿ ¬ “¿–»‘≈! »—œ–¿¬»“‹?'+CHR(13)+CHR(10),4+32,'')!=7
+*   REPLACE FOR INT(cod/1000)=183 AND stkd != ROUND(tarif/7,2) stkd WITH ROUND(tarif/7,2)
+*   REPLACE FOR INT(cod/1000)=183 AND stkdv != ROUND(tarif_v/7,2) stkdv WITH ROUND(tarif_v/7,2)
+*  ENDIF 
+* ENDIF 
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON cod TAG cod
+ REPLACE FOR IsVmp(cod) OR IsMes(cod) tpn WITH ''
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\tipgrp', "tipgrp", "excl") == 0
+ SELECT tipgrp
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON tipgr TAG tipgr
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\UsrLpu', "UsrLpu", "excl") == 0
+ SELECT UsrLpu
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON mcod TAG mcod
+ INDEX ON lpu_id TAG lpu_id
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\vidvp', "vidvp", "excl") == 0
+ SELECT vidvp
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON codvvp TAG codvvp
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+IF OpenFile(pbase+'\'+gcperiod+'\'+'nsi'+'\kms', "kms", "excl") == 0
+ SELECT kms
+ SET FULLPATH OFF 
+ WAIT "»Õƒ≈ —»–Œ¬¿Õ»≈ ‘¿…À¿ "+ALLTRIM(DBF())+' ...' WINDOW NOWAIT 
+ INDEX ON vs TAG vs
+ SET FULLPATH OFF 
+ USE
+ WAIT CLEAR 
+ENDIF
+
+*=DeleteFile('codexpxx.dbf')
+=DeleteFile('dp_0112.dbf')
+=DeleteFile('emails.dbf')
+=DeleteFile('emails.cdx')
+=DeleteFile('h_0112.dbf')
+=DeleteFile('im1.dbf')
+=DeleteFile('im1.cdx')
+=DeleteFile('im2.dbf')
+=DeleteFile('im2.cdx')
+=DeleteFile('loggfile.dbf')
+=DeleteFile('lpu_m.dbf')
+=DeleteFile('lpu_m.cdx')
+=DeleteFile('nomlpu.dbf')
+=DeleteFile('pos_dom.dbf')
+=DeleteFile('pos_dom.cdx')
+=DeleteFile('prilpuxx.dbf')
+=DeleteFile('rsltatxx.dbf')
+=DeleteFile('spr_mo.dbf')
+=DeleteFile('sprsmo.dbf')
+=DeleteFile('sprsmo.cdx')
+=DeleteFile('stac_mod.dbf')
+=DeleteFile('stac_mod.cdx')
+=DeleteFile('stmdr.dbf')
+=DeleteFile('stmdr.cdx')
+=DeleteFile('tar_s.dbf')
+=DeleteFile('tar_s.cdx')
+=DeleteFile('tarif.dbf')
+=DeleteFile('tarimu48.dbf')
+=DeleteFile('tarimu48.cdx')
+=DeleteFile('tipabo.dbf')
+=DeleteFile('users.dbf')
+=DeleteFile('users.cdx')
+=DeleteFile('usl_m.dbf')
+=DeleteFile('usl_m.cdx')
+=DeleteFile('usl_obr.dbf')
+=DeleteFile('usl_obr.cdx')
+=DeleteFile('usl_pos.dbf')
+=DeleteFile('usl_pos.cdx')
+*=DeleteFile('usrlpu.dbf')
+*=DeleteFile('usrlpu.cdx')
+=DeleteFile('volumes.dbf')
+=DeleteFile('volumes.cdx')
+=DeleteFile('z_cod.dbf')
+=DeleteFile('z_dsno.dbf')
+
+FUNCTION DeleteFile(m.FileToDeleteShort)
+ m.FileToDelete = pbase+'\'+gcperiod+'\'+'nsi\'+m.FileToDeleteShort
+ IF fso.FileExists(m.FileToDelete)
+  fso.DeleteFile(m.FileToDelete)
+ ENDIF 
+RETURN 

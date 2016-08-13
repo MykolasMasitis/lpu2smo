@@ -1,0 +1,32 @@
+MODIFY COMMAND d:\lpu2smo\bin\program\lpu2smo.prg AS 1251
+fso      = CREATEOBJECT('EntireX.Broker.ACI')
+?fso.AboutBox
+fso.AboutBox
+fso.GetErrorText
+?fso.GetErrorText
+fso.APIVersion=9
+?fso.APIVersion
+fso.BrokerID='rain.mednet.ru:10189'
+?fso.BrokerID
+fso.APIVersion=9
+fso.BrokerID='rain.mednet.ru:10189'
+fso.ServerClass='aclass'
+fso.ServerName='aname'
+fso.Service='aservice'
+fso.UserID='ruby'
+fso.Function=9
+?fso.InvokeBrokerFunction
+?fso.ErrorCode
+?fso.ErrorMsg
+fso.BrokerID='rain.mednet.ru:10188'
+?fso.InvokeBrokerFunction
+?fso.ErrorCode
+fso.Function=1
+fso.ConvID='NEW'
+m.senddata='hello'
+fso.SendBufferSize=5
+fso.Option=12
+fso.Wait='NO'
+fso.Store=2
+fso.SetSendData(m.senddata,5)
+?fso.InvokeBrokerFunction

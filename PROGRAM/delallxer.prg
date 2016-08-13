@@ -1,0 +1,5 @@
+PROCEDURE DelAllXer
+ DELETE FOR et1!=2
+ GO TOP 
+ MailView.Refresh
+RETURN 

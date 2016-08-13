@@ -1,0 +1,3 @@
+FUNCTION nWords
+ 
+RETURN 
