@@ -11,6 +11,9 @@ PROCEDURE MakeActAPSF
  m.lpuid = lpuid
  m.cokr  = cokr
  m.cokrname = IIF(SEEK(m.cokr, 'admokr'), ALLTRIM(admokr.name_okr), '')
+ IF USED('lpudogs')
+  m.numdog = IIF(SEEK(m.mcod, 'lpudogs'), lpudogs.dogs, '')
+ ENDIF 
  
  m.lIsPilot = IIF(SEEK(m.lpuid, 'pilot'), .T., .F.)
  m.IsLpuTpn = IIF(SEEK(m.lpuid, 'lputpn'), .t., .f.)
@@ -86,54 +89,57 @@ PROCEDURE MakeActAPSF
  
  WITH oExcel
    
+  m.t_cell = .Cells(6,1).Value
+  m.t_cell = ALLTRIM(m.t_cell) + ' ' + m.numdog
+  .Cells(6,1).Value = m.t_cell
   .Cells(04,36).Value  = IIF(tMonth<=10, tMonth+2, tMonth-10)
   .Cells(04,49).Value  = '1 '+LOWER(NameOfMonth2(MONTH(GOMONTH(m.tdat1,2))))
-*  .Cells(04,74).Value  = RIGHT(STR(YEAR(GOMONTH(m.tdat1,2)-1),4),2)
   .Cells(04,74).Value  = RIGHT(STR(IIF(tMonth<=10, tYear, tYear+1),4),2)
   .Cells(07,47).Value  = '1 '+LOWER(NameOfMonth2(MONTH(GOMONTH(m.tdat1,2))))
   .Cells(07,74).Value  = RIGHT(STR(IIF(tMonth<=10, tYear, tYear+1),4),2)
   .Cells(09,01).Value  = IIF(SEEK(m.lpuid, 'sprlpu'), ALLTRIM(sprlpu.fullname), '')
   .Cells(09,42).Value  = m.cokrname
 
-  m.t_cell = .Cells(14,13).Value
+  m.t_cell = .Cells(17,13).Value
+*  m.t_cell = ALLTRIM(m.t_cell) + ' ' + LOWER(NameOfMonth(tMonth+1))
   m.t_cell = ALLTRIM(m.t_cell) + ' ' + LOWER(NameOfMonth(tMonth))
-  .Cells(14,13).Value = m.t_cell
+  .Cells(17,13).Value = m.t_cell
 
   .Cells(13,52).Value  = TRANSFORM(-1*m.stroka1,'99999999.99')
   .Cells(13,79).Value  = TRANSFORM(-1*m.stroka1,'99999999.99')
   
-  .Cells(14,52).Value  = TRANSFORM(m.stroka2,'99999999.99')
-  .Cells(14,79).Value  = TRANSFORM(m.stroka2,'99999999.99')
+  .Cells(17,52).Value  = TRANSFORM(m.stroka2,'99999999.99')
+  .Cells(17,79).Value  = TRANSFORM(m.stroka2,'99999999.99')
 
-  .Cells(15,52).Value  = TRANSFORM(m.defsum,'99999999.99')
-  .Cells(15,79).Value  = TRANSFORM(m.defsum,'99999999.99')
+  .Cells(18,52).Value  = TRANSFORM(m.defsum,'99999999.99')
+  .Cells(18,79).Value  = TRANSFORM(m.defsum,'99999999.99')
 
-  .Cells(16,52).Value  = TRANSFORM(m.stroka31,'99999999.99')
-  .Cells(16,79).Value  = TRANSFORM(m.stroka31,'99999999.99')
+  .Cells(19,52).Value  = TRANSFORM(m.stroka31,'99999999.99')
+  .Cells(19,79).Value  = TRANSFORM(m.stroka31,'99999999.99')
 
-  .Cells(17,52).Value  = TRANSFORM(m.stroka32,'99999999.99')
-  .Cells(17,79).Value  = TRANSFORM(m.stroka32,'99999999.99')
+  .Cells(20,52).Value  = TRANSFORM(m.stroka32,'99999999.99')
+  .Cells(20,79).Value  = TRANSFORM(m.stroka32,'99999999.99')
 
-  .Cells(18,52).Value  = TRANSFORM(m.stroka33,'99999999.99')
-  .Cells(18,79).Value  = TRANSFORM(m.stroka33,'99999999.99')
+  .Cells(21,52).Value  = TRANSFORM(m.stroka33,'99999999.99')
+  .Cells(21,79).Value  = TRANSFORM(m.stroka33,'99999999.99')
 
-  .Cells(19,52).Value  = TRANSFORM(IIF(m.lIsPilot, m.stroka41+m.stroka42, m.stroka4),'99999999.99')
-  .Cells(19,79).Value  = TRANSFORM(IIF(m.lIsPilot, m.stroka41+m.stroka42, m.stroka4),'99999999.99')
+  .Cells(22,52).Value  = TRANSFORM(IIF(m.lIsPilot, m.stroka41+m.stroka42, m.stroka4),'99999999.99')
+  .Cells(22,79).Value  = TRANSFORM(IIF(m.lIsPilot, m.stroka41+m.stroka42, m.stroka4),'99999999.99')
 
-  .Cells(20,52).Value  = TRANSFORM(m.stroka41,'99999999.99')
-  .Cells(20,79).Value  = TRANSFORM(m.stroka41,'99999999.99')
+  .Cells(23,52).Value  = TRANSFORM(m.stroka41,'99999999.99')
+  .Cells(23,79).Value  = TRANSFORM(m.stroka41,'99999999.99')
 
-  .Cells(21,52).Value  = TRANSFORM(m.stroka42,'99999999.99')
-  .Cells(21,79).Value  = TRANSFORM(m.stroka42,'99999999.99')
+  .Cells(24,52).Value  = TRANSFORM(m.stroka42,'99999999.99')
+  .Cells(24,79).Value  = TRANSFORM(m.stroka42,'99999999.99')
 
-  .Cells(22,52).Value  = TRANSFORM(m.stroka5,'99999999.99')
-  .Cells(22,79).Value  = TRANSFORM(m.stroka5,'99999999.99')
+  .Cells(28,52).Value  = TRANSFORM(m.stroka5,'99999999.99')
+  .Cells(28,79).Value  = TRANSFORM(m.stroka5,'99999999.99')
   
-  .Cells(23,1).Value  = 'Справочно, забраковано по МЭК: '+TRANSFORM(m.sum_flk, '99999999.99')
+  .Cells(32,1).Value  = 'Справочно, забраковано по МЭК: '+TRANSFORM(m.sum_flk, '99999999.99')
 
 ENDWITH 
 
- oDoc.SaveAs(DocName)
+ oDoc.SaveAs(DocName,18)
  
  IF IsVisible == .t. 
   oExcel.Visible = .t.

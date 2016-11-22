@@ -306,7 +306,7 @@ FUNCTION CreateFilesStructure
 
  CREATE TABLE (Talon) ;
 	(RecId i AUTOINC NEXTVALUE 1 STEP 1, ;
-	 mcod c(7), period c(6), sn_pol c(25), c_i c(25), ds c(6), tip c(1), d_u d, pcod c(10), ;
+	 mcod c(7), period c(6), sn_pol c(25), c_i c(30), ds c(6), tip c(1), d_u d, pcod c(10), ;
 	 otd c(4), cod n(6), k_u n(3), d_type c(1), s_all n(11,2), q c(2),	;
 	 novor c(7), ds_s c(7), ds_p c(7), profil c(3), rslt n(3), prvs c(9), ishod n(3),;
 	 ord n(2), recid_lpu c(7), fil_id n(6), IsPr L, e_cod n(6), e_ku n(3), e_tip c(1), err_mee c(3),;
@@ -367,7 +367,7 @@ FUNCTION CreateFilesStructure
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR pazst (c_i c(25))
+ CREATE CURSOR pazst (c_i c(30))
  INDEX ON c_i TAG c_i
  SET ORDER TO c_i
 RETURN 

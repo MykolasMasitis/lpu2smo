@@ -72,7 +72,7 @@ FUNCTION MakeMEESS(m.sn_pol, IsVisible, IsQuit, TipAcc, TipOfExp)
  ELSE 
  ENDIF 
 
- CREATE CURSOR ttalon (sn_pol c(25),c_i c(25),ds c(6),tip c(1),d_u d,pcod c(10),otd c(4),cod n(6),k_u n(3),;
+ CREATE CURSOR ttalon (sn_pol c(25),c_i c(30),ds c(6),tip c(1),d_u d,pcod c(10),otd c(4),cod n(6),k_u n(3),;
   d_type c(1),s_all n(11,2),e_cod n(6),e_ku n(3),e_tip c(1),err_mee c(3),e_period c(6),et c(1),s_1 n(11,2),;
   koeff n(4,2), ee c(1), straf n(11,2))
 
@@ -317,7 +317,7 @@ FUNCTION MakeMEESS(m.sn_pol, IsVisible, IsQuit, TipAcc, TipOfExp)
   m.tot_badsum = m.tot_badsum + s_1
   m.tot_goodsum = m.tot_goodsum + (s_all-s_1)
 
-  IF IIF(!INLIST(m.qcod,'P2'), m.er_c!='W0', 1=1)
+*  IF IIF(!INLIST(m.qcod,'P2'), m.er_c!='W0', 1=1)
    oDoc.Tables(2).Cell(nRow,1).Select  && Код услуги
    oWord.Selection.InsertRows
    oWord.Selection.TypeText(STR(cod,6))
@@ -334,7 +334,7 @@ FUNCTION MakeMEESS(m.sn_pol, IsVisible, IsQuit, TipAcc, TipOfExp)
    oDoc.Tables(2).Cell(nRow,7).Select
    oWord.Selection.TypeText(TRANSFORM(s_all-s_1, '999999.99'))
    nRow = nRow + 1
-  ENDIF 
+*  ENDIF 
     
   m.tot_straf = m.tot_straf + IIF( m.tot_straf<=0, straf*m.ynorm, 0)
 

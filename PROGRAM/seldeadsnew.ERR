@@ -1,2 +1,0 @@
-m.n_dog - IIF(SEEK(m.lpuid,'lpudogs'), lpudogs.dogs,'')
-Error in line 153: Syntax error.

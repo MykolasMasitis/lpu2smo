@@ -74,7 +74,7 @@ PROCEDURE Flk2Lpu
   m.d5file   = 'ud_' + mcod
 *  m.mmid     = m.un_id+'.'+m.gcUser+'@'+m.qmail
   m.mmid     = m.un_id+'.'+m.usrmail+'@'+m.qmail
-  m.csubj    = 'OMS#'+lcPeriod+'###1'
+  m.csubj    = 'OMS#'+lcPeriod+'#'+STR(lcLpuID,4)+'##1'
 
   poi = fso.CreateTextFile(lcPath + '\' + m.tansfile)
 

@@ -3,14 +3,14 @@ PROCEDURE selcrosss
   RETURN 
  ENDIF 
  
- CREATE CURSOR curgosps (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+ CREATE CURSOR curgosps (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
   fam c(25), im c(25), ot c(25), dr d, w n(1), d_u d, ds c(6), dss c(3), k_u n(5),;
   otd c(4), pcod c(10))
  INDEX on c_i TAG c_i
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO c_i 
 
- CREATE CURSOR curpolks (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+ CREATE CURSOR curpolks (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
   fam c(25), im c(25), ot c(25), dr d, w n(1), cod n(6), d_u d, ds c(6), k_u n(5),;
   otd c(4), pcod c(10))
  INDEX on c_i TAG c_i
@@ -36,7 +36,7 @@ PROCEDURE selcrosss
  WAIT "Œ‘Œ–ÃÀ≈Õ»≈ –≈«”À‹“¿“Œ¬..." WINDOW NOWAIT 
 
  outfile = pmee+'\slcrosses'
- CREATE TABLE &outfile (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+ CREATE TABLE &outfile (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
   fam c(25), im c(25), ot c(25), dr d, w n(1), d_u d, cod n(6), ds c(6), k_u n(5),;
   otd c(4), pcod c(10), d_pos d, d_vip d, gosp c(7))
  USE 

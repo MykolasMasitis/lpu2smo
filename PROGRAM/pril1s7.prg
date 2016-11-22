@@ -77,7 +77,7 @@ PROCEDURE Pril1S7
   CREATE CURSOR curdst (sn_pol c(25))
   INDEX on sn_pol TAG sn_pol
   SET ORDER TO sn_pol
-  CREATE CURSOR curst (c_i c(25))
+  CREATE CURSOR curst (c_i c(30))
   INDEX on c_i TAG c_i
   SET ORDER TO c_i
   

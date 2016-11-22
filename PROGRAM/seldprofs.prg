@@ -11,7 +11,7 @@ PROCEDURE seldprofs
   RETURN 
  ENDIF 
  
- CREATE CURSOR curprofs (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+ CREATE CURSOR curprofs (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
   fam c(25), im c(25), ot c(25), dr d, w n(1), d_u d, ds c(6), otd c(4), pcod c(10), ;
   cod n(6), k_u n(3), s_all n(11,2), d_beg d, d_end d, codname c(40), lpuname c(40))
 

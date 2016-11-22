@@ -132,7 +132,7 @@ FUNCTION MakeEKMPSS1(lpolis, lcPath, IsVisible, IsQuit, TipAcc, TipOfExp)
  m.ppolis = STRTRAN(ALLTRIM(m.sn_pol),' ','') && Для названия Акта
  
 
- CREATE CURSOR ttalon (sn_pol c(25),c_i c(25),ds c(6),tip c(1),d_u d,pcod c(10),otd c(4),cod n(6),k_u n(3),;
+ CREATE CURSOR ttalon (sn_pol c(25),c_i c(30),ds c(6),tip c(1),d_u d,pcod c(10),otd c(4),cod n(6),k_u n(3),;
   d_type c(1),s_all n(11,2),e_cod n(6),e_ku n(3),e_tip c(1),err_mee c(3),e_period c(6),et c(1),docexp c(7), ;
   s_1 n(11,2), s_2 n(11,2))
 

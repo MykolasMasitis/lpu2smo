@@ -3,14 +3,7 @@ PROCEDURE seldblgosps
   RETURN 
  ENDIF 
  
-* CREATE CURSOR curgosps (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
-  fam c(25), im c(25), ot c(25), dr d, w n(1), ul n(5), dom c(7), ;
-  kor c(5), str c(5), kv c(5), d_u d, ds c(6), dss c(3), k_u n(5),;
-  otd c(4), pcod c(10), lpuname c(40))
-* CREATE CURSOR curdeads (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
-  fam c(25), im c(25), ot c(25), dr d, w n(1), d_u d, ds c(6), otd c(4), pcod c(10), ;
-  cod n(6), k_u n(3), tip c(1), n_kd n(3),s_all n(11,2), d_beg d, d_end d, codname c(40), lpuname c(40), ischked l)
- CREATE CURSOR curgosps (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+ CREATE CURSOR curgosps (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
   fam c(25), im c(25), ot c(25), dr d, w n(1),d_u d, ds c(6), dss c(3), otd c(4), pcod c(10), ;
   cod n(6), k_u n(5),tip c(1), n_kd n(3),s_all n(11,2), d_beg d, d_end d, codname c(40), lpuname c(40), ischked l)
  INDEX on c_i TAG c_i
@@ -19,8 +12,6 @@ PROCEDURE seldblgosps
 
  FOR lnmonth=1 TO 12
   m.lcperiod = STR(tYear,4)+PADL(lnmonth,2,'0')
-* FOR m.nmm=1 TO 3
-*  m.lcperiod = LEFT(DTOS(GOMONTH(m.tdat2,-m.nmm)),6)
   m.lpath = pbase+'\'+m.lcperiod
   IF !fso.FolderExists(m.lpath)
    LOOP 
@@ -33,18 +24,14 @@ PROCEDURE seldblgosps
   =seldblgosp(m.lpath)
   WAIT CLEAR 
 
- NEXT 
+ ENDFOR 
 
  CREATE CURSOR curmcod (mcod c(7), lpuname c(40))
  INDEX on mcod TAG mcod
  SET ORDER TO mcod 
 
  outfile = pmee+'\sldblgosps'
-* CREATE TABLE &outfile (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
-  fam c(25), im c(25), ot c(25), dr d, w n(1), ul n(5), dom c(7), ;
-  kor c(5), str c(5), kv c(5), d_u d, ds c(6), dss c(3), k_u n(5),;
-  otd c(4), pcod c(10), d_u1 d, d_u2 d, lpuname c(40))
- CREATE TABLE &outfile (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+ CREATE TABLE &outfile (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
   fam c(25), im c(25), ot c(25), dr d, w n(1), d_u d, ds c(6), dss c(3), cod n(6), k_u n(5),;
   otd c(4), pcod c(10), d_u1 d, d_u2 d, tip c(1), n_kd n(3),s_all n(11,2), d_beg d, d_end d, ;
   codname c(40), lpuname c(40), ischked l)

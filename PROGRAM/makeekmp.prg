@@ -144,6 +144,7 @@ FUNCTION MakeEkmp1(lpolis, lcPath, IsVisible, IsQuit, TipAcc, TipOfExp)
   RETURN
  ENDIF 
  
+ m.fiopaz = IIF(SEEK(m.sn_pol, 'people', 'sn_pol'), ALLTRIM(people.fam)+' '+ALLTRIM(people.im)+' '+ALLTRIM(people.ot), '')
  m.d_beg = IIF(SEEK(m.sn_pol, 'people', 'sn_pol'), people.d_beg, {})
  m.d_end = IIF(SEEK(m.sn_pol, 'people', 'sn_pol'), people.d_end, {})
  m.sex   = IIF(SEEK(m.sn_pol, 'people', 'sn_pol'), IIF(people.w==1,'мужской','женский'), '')
@@ -166,7 +167,7 @@ FUNCTION MakeEkmp11(lpolis, lcPath, IsVisible, IsQuit, TipAcc, TipOfExp, para7)
  m.sn_pol = lpolis
  m.docexp = para7
 
- CREATE CURSOR ttalon (recid i, sn_pol c(25), c_i c(25), docotd c(100), ds c(6), d_in d, d_u d, pcod c(10),;
+ CREATE CURSOR ttalon (recid i, sn_pol c(25), c_i c(30), docotd c(100), ds c(6), d_in d, d_u d, pcod c(10),;
   otd c(4), cod n(6), k_u n(3), d_type c(1), s_all n(11,2), err_mee c(3), docexp c(7), ishod n(3), is_name c(60))
  INDEX on recid TAG recid
  SET ORDER TO recid 

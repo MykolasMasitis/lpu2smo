@@ -49,6 +49,17 @@ PROCEDURE MakeUDFiles
   USE IN aisoms
   RETURN 
  ENDIF 
+ IF OpenFile(pbase+'\'+m.gcperiod+'\nsi\sprlpuxx', 'sprlpu', 'shar', 'mcod')>0
+  IF USED('sprlpu')
+   USE IN sprlpu
+  ENDIF 
+  USE IN horlpu
+  USE IN tarif
+  USE IN lputpn
+  USE IN pilot
+  USE IN aisoms
+  RETURN 
+ ENDIF 
 
  
  dufile = pbase+'\'+m.gcperiod+'\ud'+m.qcod+m.gcperiod
@@ -72,7 +83,6 @@ PROCEDURE MakeUDFiles
    IF !SEEK(m.lpuid, 'horlpu')
     LOOP 
    ENDIF 
-*   LOOP 
   ENDIF 
   IF !fso.FileExists(pbase+'\'+m.gcperiod+'\'+m.mcod+'\people.dbf')
    LOOP 
@@ -121,12 +131,6 @@ PROCEDURE MakeUDFiles
   WAIT m.mcod WINDOW NOWAIT 
   
   SCAN 
-*   IF m.IsLpuTpn = .T.
-*    m.fil_id = fil_id
-*    IF !SEEK(m.fil_id, 'lputpn', 'fil_id')
-*     LOOP 
-*    ENDIF 
-*   ENDIF 
    m.prmcod  = people.prmcod
    IF !EMPTY(error.c_err)
     LOOP 
@@ -140,21 +144,16 @@ PROCEDURE MakeUDFiles
    
    m.prlpuid = IIF(SEEK(m.prmcod, 'pilot', 'mcod'), pilot.lpu_id, 0)
    IF !SEEK(m.prlpuid, 'pilot')
-*    IF !SEEK(m.prlpuid, 'horlpu')
-*     LOOP 
-*    ENDIF 
     LOOP 
    ENDIF 
 
    m.cod     = cod
    m.otd     = SUBSTR(otd,2,2)
    m.d_type  = d_type
-*   m.IsTpnR  = IIF(SEEK(m.cod, 'tarif') AND tarif.tpn='r' AND !(IsKdS(m.cod) OR IsEko(m.cod)), .T., .F.)
    m.IsTpnR  = IIF(SEEK(m.cod, 'tarif') AND tarif.tpn='r' AND !(IsKdS(m.cod)), .T., .F.)
    m.ord     = ord
    m.lpu_ord = lpu_ord
 
-*   IF IsMes(m.cod) OR IsVmp(m.cod) OR IsKDS(m.cod) OR IsEKO(m.cod)
    IF IsMes(m.cod) OR IsVmp(m.cod) OR IsKDS(m.cod)
     LOOP 
    ENDIF 
@@ -171,13 +170,6 @@ PROCEDURE MakeUDFiles
     LOOP 
    ENDIF 
 
-*   IF INLIST(m.otd,'70','73','93')
-*    LOOP 
-*   ENDIF 
-*   IF INLIST(m.otd,'01','90') AND !IsStac(m.mcod)
-*    LOOP 
-*   ENDIF 
-   
    m.cod     = cod
    m.k_u     = k_u
    m.s_all   = s_all
@@ -185,14 +177,15 @@ PROCEDURE MakeUDFiles
    m.otd     = SUBSTR(otd,2,2)
    
    m.lIs02 = IIF(SEEK(m.cod, 'tarif') AND tarif.tpn='q', .t., .f.)
+   m.prlpuid = IIF(SEEK(m.prmcod, 'sprlpu', 'mcod'), sprlpu.lpu_id, 0)
 
-*   IF EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92'))
+
    IF !EMPTY(m.lpu_ord) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92')))
+*   IF (!EMPTY(m.lpu_ord) AND m.lpu_ord=m.prlpuid) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92')))
     m.vz = 1
    ELSE 
     m.vz = 2
    ENDIF 
-*   m.vz = IIF(!EMPTY(m.lpu_ord), 1, 2)
    
    INSERT INTO dufile (mcod,lpu_id,prmcod,prlpu_id,cod,k_u,pr_all,vz) VALUES ;
     (m.mcod,m.lpuid,m.prmcod,m.prlpuid,m.cod,m.k_u,m.s_all,m.vz)
@@ -306,7 +299,8 @@ PROCEDURE MakeUDFiles
  USE IN lputpn
  USE IN tarif
  USE IN dufile
- 
+ USE IN sprlpu
+
  MESSAGEBOX(CHR(13)+CHR(10)+'Œ¡–¿¡Œ“ ¿ «¿ ŒÕ◊≈Õ¿!'+CHR(13)+CHR(10),0+64,'')
  
 RETURN 

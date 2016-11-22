@@ -9,9 +9,9 @@ PROCEDURE SendMEFiles
  SELECT AisOms
 
  SCAN
-  IF s_pred-sum_flk <= 0
-   LOOP 
-  ENDIF 
+*  IF s_pred-sum_flk <= 0
+*   LOOP 
+*  ENDIF 
 
   m.mcod = mcod
   m.lpu_id = lpuid

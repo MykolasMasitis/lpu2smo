@@ -43,7 +43,7 @@ PROCEDURE FormS21 && Летальник полный
   RETURN 
  ENDIF 
  
- CREATE CURSOR curdeads (period c(6), mcod c(7), lpuid c(4), lpuname c(40), sn_pol c(17), c_i c(25), cod n(6), d_u d, ;
+ CREATE CURSOR curdeads (period c(6), mcod c(7), lpuid c(4), lpuname c(40), sn_pol c(17), c_i c(30), cod n(6), d_u d, ;
   prv c(3), pr_name c(100), e_period c(6), docexp c(7))
  INDEX on mcod+sn_pol TAG msn_pol
  SET ORDER TO msn_pol 

@@ -83,6 +83,24 @@ PUBLIC paisoms, parc, pbase, pbin, pcommon, pout, ptempl, ptrash, pdouble, pmee,
  tyear, tmonth, tdat1, tdat2, curlpu, qcod, qmail, qobjid, UserERZ, qname, oMenu, gcPeriod, gcUser, gcFormat,;
  usrfam, usrim, usrot, usrfio, usrmail, supervisor, pattppl, m.ynorm, IsUsrDir
 
+PUBLIC m.DeadDate, m.IntDate
+m.IntDate={04.09.2016}
+m.DeadDate={31.12.2017}
+DO CASE 
+ CASE m.qcod='S6'
+  m.DeadDate={01.02.2017}
+ CASE m.qcod='P2'
+  m.DeadDate={16.01.2017}
+ CASE m.qcod='R4'
+  m.DeadDate={23.01.2017}
+ CASE m.qcod='I1'
+  m.DeadDate={26.01.2017}
+ CASE m.qcod='S7'
+  m.DeadDate={30.01.2017}
+ OTHERWISE 
+ 
+ENDCASE 
+
 m.ynorm = 0
 
 PUBLIC ARRAY mes_text[12], mes_main[12]
@@ -127,6 +145,10 @@ SET LIBRARY TO &lcPathMain\vfpexmapi ADDITIVE
 *SET LIBRARY TO (lcSetLibrary) ADDITIVE 
 
 IF CfgBase() = -1
+ =ExitProg()
+ENDIF 
+
+IF DATE()>m.DeadDate
  =ExitProg()
 ENDIF 
 

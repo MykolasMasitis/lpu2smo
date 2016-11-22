@@ -329,7 +329,7 @@ SCAN FOR aisoms.s_pred>0
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR pazst (c_i c(25))
+ CREATE CURSOR pazst (c_i c(30))
  INDEX ON c_i TAG c_i
  SET ORDER TO c_i
    
@@ -341,7 +341,7 @@ SCAN FOR aisoms.s_pred>0
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR pazstmek (c_i c(25))
+ CREATE CURSOR pazstmek (c_i c(30))
  INDEX ON c_i TAG c_i
  SET ORDER TO c_i
 
@@ -353,7 +353,7 @@ SCAN FOR aisoms.s_pred>0
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR pazstmee (c_i c(25))
+ CREATE CURSOR pazstmee (c_i c(30))
  INDEX ON c_i TAG c_i
  SET ORDER TO c_i
 
@@ -365,7 +365,7 @@ SCAN FOR aisoms.s_pred>0
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR stchkdmee (c_i c(25))
+ CREATE CURSOR stchkdmee (c_i c(30))
  INDEX ON c_i TAG c_i
  SET ORDER TO c_i
 

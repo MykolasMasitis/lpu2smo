@@ -214,7 +214,7 @@ FUNCTION OneSvAct(paraexp)
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR qwertst (c_i c(25))
+ CREATE CURSOR qwertst (c_i c(30))
  INDEX on c_i TAG c_i
  SET ORDER TO c_i
 
@@ -226,7 +226,7 @@ FUNCTION OneSvAct(paraexp)
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR workcurs (nrec n(5), sn_pol c(25), c_i c(25), s_all n(11,2), er_c c(2), osn230 c(6), ;
+ CREATE CURSOR workcurs (nrec n(5), sn_pol c(25), c_i c(30), s_all n(11,2), er_c c(2), osn230 c(6), ;
   koeff n(4,2), straf n(4,2))
  INDEX ON sn_pol TAG sn_pol
  INDEX ON c_i TAG c_i

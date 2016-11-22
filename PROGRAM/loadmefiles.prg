@@ -69,7 +69,7 @@ PROCEDURE LoadMeFiles
   CREATE CURSOR curamb (sn_pol c(25))
   INDEX ON sn_pol TAG sn_pol
   SET ORDER TO sn_pol
-  CREATE CURSOR curst (c_i c(25))
+  CREATE CURSOR curst (c_i c(30))
   INDEX ON c_i TAG c_i
   SET ORDER TO c_i
   CREATE CURSOR curdst (sn_pol c(25))

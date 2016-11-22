@@ -46,7 +46,7 @@ PROCEDURE FindPaz
   RETURN 
  ENDIF 
 
- CREATE CURSOR curpaz (mcod c(7), lpuname c(40), period c(6), sn_pol c(25), c_i c(25), ds c(6), pcod c(10), cod n(6), uslname c(40), k_u n(3), tip c(1), ;
+ CREATE CURSOR curpaz (mcod c(7), lpuname c(40), period c(6), sn_pol c(25), c_i c(30), ds c(6), pcod c(10), cod n(6), uslname c(40), k_u n(3), tip c(1), ;
   d_u d, s_all n(11,2), fil_id n(6), d_type c(1))
  INDEX on mcod TAG mcod 
  INDEX on cod TAG cod

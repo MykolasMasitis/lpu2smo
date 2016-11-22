@@ -311,7 +311,7 @@ SCAN FOR aisoms.s_pred>0
  CREATE CURSOR paz4 (sn_pol c(25))
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
- CREATE CURSOR paz6 (c_i c(25))
+ CREATE CURSOR paz6 (c_i c(30))
  INDEX on c_i TAG c_i
  SET ORDER TO c_i
  CREATE CURSOR paz7 (sn_pol c(25))

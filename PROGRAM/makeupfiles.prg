@@ -54,6 +54,17 @@ PROCEDURE MakeUPFiles
   USE IN aisoms
   RETURN 
  ENDIF 
+ IF OpenFile(pbase+'\'+m.gcperiod+'\nsi\sprlpuxx', 'sprlpu', 'shar', 'mcod')>0
+  IF USED('sprlpu')
+   USE IN sprlpu
+  ENDIF 
+  USE IN horlpu
+  USE IN tarif
+  USE IN lputpn
+  USE IN pilot
+  USE IN aisoms
+  RETURN 
+ ENDIF 
  
  SELECT aisoms
  SCAN FOR !DELETED()
@@ -141,9 +152,6 @@ PROCEDURE MakeUPFiles
    
    m.prlpuid = IIF(SEEK(m.prmcod, 'pilot', 'mcod'), pilot.lpu_id, 0)
    IF !SEEK(m.prlpuid, 'pilot')
-*    IF !SEEK(m.prlpuid, 'horlpu')
-*     LOOP 
-*    ENDIF 
     LOOP 
    ENDIF 
 
@@ -172,11 +180,13 @@ PROCEDURE MakeUPFiles
    m.lpu_ord = lpu_ord
    m.otd     = SUBSTR(otd,2,2)
    
-   m.lIs02 = IIF(SEEK(m.cod, 'tarif') AND tarif.tpn='q', .t., .f.)
+   m.lIs02   = IIF(SEEK(m.cod, 'tarif') AND tarif.tpn='q', .t., .f.)
+   m.prlpuid = IIF(SEEK(m.prmcod, 'sprlpu'), sprlpu.lpu_id, 0)
 
+*   IF (!EMPTY(m.lpu_ord) AND m.lpu_ord=m.prlpuid) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92')))
    IF !EMPTY(m.lpu_ord) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92')))
-    m.vz = 1
-   ELSE 
+    m.vz = 1 
+   ELSE && IF EMPTY(m.lpu_ord) AND !(m.lIs02=.T. OR INLIST(m.otd,'08','92'))
     m.vz = 2
    ENDIF 
    
@@ -204,6 +214,11 @@ PROCEDURE MakeUPFiles
   
  ENDSCAN 
  USE IN aisoms
+ USE IN horlpu
+ USE IN tarif
+ USE IN lputpn
+ USE IN pilot
+ USE IN sprlpu
  
  MESSAGEBOX(CHR(13)+CHR(10)+'Œ¡–¿¡Œ“ ¿ «¿ ŒÕ◊≈Õ¿!'+CHR(13)+CHR(10),0+64,'')
  

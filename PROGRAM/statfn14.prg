@@ -89,11 +89,11 @@ PROCEDURE StatFN14
   INDEX ON sn_pol TAG sn_pol
   SET ORDER TO sn_pol
 
-  CREATE CURSOR stpaz1 (c_i c(25))
+  CREATE CURSOR stpaz1 (c_i c(30))
   INDEX ON c_i TAG c_i
   SET ORDER TO c_i
 
-  CREATE CURSOR stpaz2 (c_i c(25))
+  CREATE CURSOR stpaz2 (c_i c(30))
   INDEX ON c_i TAG c_i
   SET ORDER TO c_i
 

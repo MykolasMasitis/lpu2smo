@@ -235,7 +235,7 @@ FUNCTION OneSvAct(paraexp)
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR qwertst (c_i c(25))
+ CREATE CURSOR qwertst (c_i c(30))
  INDEX on c_i TAG c_i
  SET ORDER TO c_i
 
@@ -247,20 +247,27 @@ FUNCTION OneSvAct(paraexp)
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR workcurs (nrec n(5), sn_pol c(25), c_i c(25), s_all n(11,2), er_c c(2), osn230 c(6), ;
+ CREATE CURSOR workcurs (nrec n(5), sn_pol c(25), c_i c(30), s_all n(11,2), er_c c(2), osn230 c(6), ;
   koeff n(4,2), straf n(4,2))
  INDEX ON sn_pol TAG sn_pol
  INDEX ON c_i TAG c_i
  
- CREATE CURSOR curdata2 (nrec2 n(5), sn_pol c(25), c_i c(25), d_beg d, d_end d, ds c(6), cod n(6), s_all n(11,2), ;
+ CREATE CURSOR curdata2 (nrec2 n(5), sn_pol c(25), c_i c(30), d_beg d, d_end d, ds c(6), cod n(6), s_all n(11,2), ;
   osn230 c(5), er_c c(3), delta n(11,2), koeff n(3,2), straf n(11,2), cmnt c(50))
  SELECT curdata2
+ INDEX on sn_pol TAG sn_pol
+ SET ORDER TO sn_pol
+
+ CREATE CURSOR curdata3 (nrec3 n(5), sn_pol c(25), c_i c(30), d_beg d, d_end d, ds c(6), cod n(6), s_all n(11,2), ;
+  osn230 c(5), er_c c(3), delta n(11,2), koeff n(3,2), straf n(11,2), cmnt c(50))
+ SELECT curdata3
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
  SELECT merror
  SET RELATION TO recid INTO talon 
  m.nrec2 = 0 
+ m.nrec3 = 0 
  SCAN 
 
   IF !(et=m.TipOfExp AND docexp=m.docexp)
@@ -278,8 +285,15 @@ FUNCTION OneSvAct(paraexp)
   m.s_all       = s_all
   m.cod         = cod
 
+  IF m.er_c == 'GG' AND !SEEK(m.sn_pol, 'curdata3') && Не представлено первички
+   m.nepredst = m.nepredst + 1
+   INSERT INTO curdata3 FROM MEMVAR 
+   m.nrec3 = m.nrec3+1
+  ENDIF 
+
   IF m.s_2>0 AND !SEEK(m.sn_pol, 'curdata2')
    m.straf       = straf
+   m.tot_straf = m.tot_straf + (m.straf*m.ynorm)
    INSERT INTO curdata2 FROM MEMVAR 
    m.nrec2 = m.nrec2+1
   ENDIF 
@@ -287,12 +301,12 @@ FUNCTION OneSvAct(paraexp)
   INSERT INTO workcurs (sn_pol, c_i, s_all, er_c, osn230, koeff, straf) VALUES ;
    (m.sn_pol, m.c_i, ROUND(m.s_all*m.koeff,2), m.er_c, m.osn230, m.koeff, m.straf)
 
-  IF !SEEK(m.sn_pol, 'curpaz')
-   INSERT INTO curpaz FROM MEMVAR 
-   m.tot_straf = m.tot_straf + (m.straf*m.ynorm)
+*  IF !SEEK(m.sn_pol, 'curpaz')
+*   INSERT INTO curpaz FROM MEMVAR 
+*   m.tot_straf = m.tot_straf + (m.straf*m.ynorm)
    m.kol_straf = m.kol_straf + IIF(m.straf*m.ynorm>0,1,0)
-   IF m.er_c == 'GG' && Непредставлено первички
-    m.nepredst = m.nepredst + 1
+   IF m.er_c == 'GG' && Не представлено первички
+*    m.nepredst = m.nepredst + 1
    ELSE 
 *    m.checked = m.checked + 1
 
@@ -311,11 +325,16 @@ FUNCTION OneSvAct(paraexp)
      m.checked_st = m.checked_st + 1
     ENDIF 
 
+    IF (Is02(m.cod)) AND !SEEK(m.c_i, 'qwertst')
+     INSERT INTO qwertst (c_i) VALUES (m.c_i)
+     m.checked_st = m.checked_st + 1
+    ENDIF 
+
    ENDIF 
    IF m.er_c != 'W0'
     m.totdefs = m.totdefs + 1
    ENDIF 
-  ENDIF 
+*  ENDIF 
 
  ENDSCAN 
  SET RELATION OFF INTO talon 
@@ -324,13 +343,13 @@ FUNCTION OneSvAct(paraexp)
  SELECT workcurs
  SET ORDER TO sn_pol
  GO TOP 
- m.nrec = 1
+ m.nrec = IIF(m.mcod='0371001', 0, 1)
  m.polis = sn_pol
  SCAN
   m.sumneoplata = m.sumneoplata + s_all
   m.sn_pol = sn_pol
   m.defs = m.defs+osn230+'; '
-  IF m.sn_pol!=m.polis
+  IF m.sn_pol!=m.polis OR m.mcod='0371001'
    m.polis = m.sn_pol
    m.nrec = m.nrec + 1
   ENDIF 
@@ -341,6 +360,11 @@ FUNCTION OneSvAct(paraexp)
  IF RECCOUNT('curdata2')<=0
   SCATTER MEMVAR 
   INSERT INTO curdata2 FROM MEMVAR 
+ ENDIF 
+ SELECT curdata3
+ IF RECCOUNT('curdata3')<=0
+  SCATTER MEMVAR 
+  INSERT INTO curdata3 FROM MEMVAR 
  ENDIF 
 * SET ORDER TO 
 * REPLACE ALL nrec2 WITH RECNO()
@@ -355,7 +379,7 @@ FUNCTION OneSvAct(paraexp)
 
  USE IN workcurs
  USE IN qwertamb
- USE IN qwertst
+ SELECT qwertst
  USE IN qwertdst
 
  SELECT curexps

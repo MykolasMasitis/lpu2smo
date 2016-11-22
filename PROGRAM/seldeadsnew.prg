@@ -3,7 +3,7 @@ PROCEDURE seldeadsnew
   RETURN 
  ENDIF 
  
- CREATE CURSOR curdeads (nrec i AUTOINC, period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+ CREATE CURSOR curdeads (nrec i AUTOINC, period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
   fam c(25), im c(25), ot c(25), dr d, w n(1), d_u d, ds c(6), ds_n c(150), ds_2 c(6), ds_2_n c(150), ds_3 c(6), ds_3_n c(150),;
   ds_pat c(6), ds_pat_n c(150), ds_2_pat c(6), ds_2_pat_n c(150), ds_3_pat c(6), ds_3_pat_n c(150), otd c(4), otdname c(100), ;
   pcod c(10), docname c(100), cod n(6), codname c(100), k_u n(3), n_kd n(3), tip c(1),;
@@ -11,7 +11,7 @@ PROCEDURE seldeadsnew
   osn230 c(6), osn230_n c(150), koeff n(4,2), straf n(4,2), s_1 n(11,2), s_2 n(11,2), codho c(14), honame c(100), usr c(6), usrname c(150),;
   d_exp d, docexp c(6),dschet d, nschet c(7), n_dog c(16))
  INDEX on nrec TAG nrec 
- CREATE CURSOR curpats (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+ CREATE CURSOR curpats (period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
   fam c(25), im c(25), ot c(25), dr d, w n(1), d_u d, ds c(6), ds_n c(150),ds_2 c(6), ds_2_n c(150), ds_3 c(6), ds_3_n c(150),;
   otd c(4), otdname c(100), pcod c(10), docname c(100),;
   cod n(6), codname c(100), k_u n(3), s_all n(11,2), d_beg d, d_end d, lpuname c(40), ischked l)

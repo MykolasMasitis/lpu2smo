@@ -1,5 +1,5 @@
-PROCEDURE FormSh3Bis
- IF MESSAGEBOX('ÑÔÎÐÌÈÐÎÂÀÒÜ ÎÒ×ÅÒ ÏÎ ÏÐÎÂÅÄÅÍÍÛÌ ÝÊÑÏÅÐÒÈÇÀÌ?'+CHR(13)+CHR(10),4+32,'ÔÎÐÌÀ Ø-3Áèñ')=7
+PROCEDURE FormSh3
+ IF MESSAGEBOX('ÑÔÎÐÌÈÐÎÂÀÒÜ ÎÒ×ÅÒ ÏÎ ÏÐÎÂÅÄÅÍÍÛÌ ÝÊÑÏÅÐÒÈÇÀÌ?'+CHR(13)+CHR(10),4+32,'ÔÎÐÌÀ Ø-3')=7
   RETURN 
  ENDIF 
  IF !fso.FolderExists(pmee)
@@ -77,7 +77,7 @@ PROCEDURE FormSh3Bis
  ENDTRY 
  WAIT CLEAR 
 
- m.BookName = 'sh3bis_'+m.et
+ m.BookName = 'sh3_'+m.et
  m.nOpBooks = oExcel.Workbooks.Count 
  IF m.nOpBooks>0
   FOR m.nBook=1 TO m.nOpBooks
@@ -240,10 +240,9 @@ PROCEDURE FormSh3Bis
    m.c_i    = talon.c_i
    m.sn_pol = talon.sn_pol
    m.cod    = cod
-   m.profil = profil
    m.lIsDsp = IIF(SEEK(m.cod, 'dspcodes'), .T., .F.)
    m.err    = UPPER(LEFT(err_mee,2))
-   m.lIsDef = IIF(m.err!='W0', .T., .F.)
+   m.lIsDef  = IIF(m.err!='W0', .T., .F.)
 
    DO CASE 
     CASE IsUsl(m.cod)

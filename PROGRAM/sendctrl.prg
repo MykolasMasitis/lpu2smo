@@ -29,7 +29,7 @@ FUNCTION SendCtrl(lcPath)
  m.d1file   = 'd1' + m.un_id
  m.d2file   = 'd2' + m.un_id
  m.mmid     = m.un_id+'.'+m.usrmail+'@'+m.qmail
- m.csubj    = 'OMS#'+lcPeriod+'###1'
+ m.csubj    = 'OMS#'+lcPeriod+'#'+PADL(lcLpuID,4,'0')+'##1'
 
  poi = fso.CreateTextFile(lcPath + '\' + m.tansfile)
 

@@ -576,11 +576,11 @@ oSettings.CodePage('&tyu', 866, .t.)
 IF OpenFile(pcommon+'\sprlpuxx', 'sprlpu', 'shar')<=0
  SELECT sprlpu
  COPY FOR lpu_id=fil_id TO pBase+'\'+gcPeriod+'\NSI\sprlpuxx' ;
-  FIELDS lpu_id,fil_id,tpn,vmp,mcod,name,fullname,cokr,adres
+  FIELDS lpu_id,fil_id,fcod,tpn,vmp,mcod,name,fullname,cokr,adres
  COPY FOR name='Поликлиника с ТПН' TO pBase+'\'+gcPeriod+'\NSI\lputpn' ;
-  FIELDS lpu_id,fil_id,tpn,vmp,mcod,name,fullname,cokr,adres
+  FIELDS lpu_id,fil_id,fcod,tpn,vmp,mcod,name,fullname,cokr,adres
  COPY FOR tpn='4' TO pBase+'\'+gcPeriod+'\NSI\horlpu' ;
-  FIELDS lpu_id,fil_id,tpn,vmp,mcod,name,fullname,cokr,adres
+  FIELDS lpu_id,fil_id,fcod,tpn,vmp,mcod,name,fullname,cokr,adres
  USE 
  IF OpenFile(pBase+'\'+gcPeriod+'\NSI\sprlpuxx', 'sprlpu', 'excl')<=0
   SET FULLPATH OFF 

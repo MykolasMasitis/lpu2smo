@@ -39,7 +39,7 @@ PROCEDURE FormS20
  INDEX on nrec TAG nrec
  SET ORDER TO nrec 
  
- CREATE CURSOR curgosps (period c(7), mcod c(7), sn_pol c(25), c_i c(25), d_u d, ds c(6), dss c(3), k_u n(5), otd c(4))
+ CREATE CURSOR curgosps (period c(7), mcod c(7), sn_pol c(25), c_i c(30), d_u d, ds c(6), dss c(3), k_u n(5), otd c(4))
  INDEX ON c_i TAG c_i
  INDEX ON sn_pol TAG sn_pol
  INDEX ON sn_pol + dss TAG unik
@@ -176,7 +176,7 @@ PROCEDURE FormS20
 * COPY TO &pbase\&gcperiod\curgosps CDX 
  SET ORDER TO unik
 
- CREATE CURSOR curdbls (mcod c(7), sn_pol c(25), c_i c(25))
+ CREATE CURSOR curdbls (mcod c(7), sn_pol c(25), c_i c(30))
  
  SELECT aisoms
  SET RELATION TO lpuid INTO sprlpu
@@ -231,7 +231,7 @@ PROCEDURE FormS20
   ENDIF 
   
   WAIT m.mcod+'...' WINDOW NOWAIT 
-  CREATE CURSOR curss (c_i c(25))
+  CREATE CURSOR curss (c_i c(30))
   INDEX on c_i TAG c_i
   SET ORDER TO c_i
   SELECT talon 

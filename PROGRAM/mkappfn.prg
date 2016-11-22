@@ -67,8 +67,11 @@ PROCEDURE mkAppFn(mcod,m.IsVisible,m.IsQuit)
  IF fso.FileExists(docname+'.xls')
   fso.DeleteFile(docname+'.xls')
  ENDIF 
- oDoc.SaveAs(DocName)
+ oDoc.SaveAs(DocName, 18)
  TRY 
+  IF fso.FileExists(docname+'.pdf')
+   fso.DeleteFile(docname+'.pdf')
+  ENDIF 
   oDoc.SaveAs(DocName, 57)
  CATCH 
  ENDTRY 
@@ -83,5 +86,4 @@ PROCEDURE mkAppFn(mcod,m.IsVisible,m.IsQuit)
   ENDIF 
  ENDIF 
  
-
 RETURN 

@@ -73,7 +73,7 @@ PROCEDURE SelDsps
   RETURN 
  ENDIF 
   
- CREATE CURSOR allguests (nrec i AUTOINC, period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+ CREATE CURSOR allguests (nrec i AUTOINC, period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
   fam c(25), im c(25), ot c(25), dr d, w n(1), d_u d, ds c(6), otd c(4), pcod c(10), ;
   cod n(6), tip c(1), k_u n(3), n_kd n(3), s_all n(11,2), d_beg d, d_end d, codname c(40), lpuname c(40), q c(2),;
   isexp l, et c(1), osn230 c(5), s_1 n(11,2), s_2 n(11,2))
@@ -187,7 +187,7 @@ FUNCTION SelAlienOne()
    fso.DeleteFile(m.docname)
   ENDIF 
 
-  CREATE CURSOR curguests (nrec i AUTOINC, period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(25), ;
+  CREATE CURSOR curguests (nrec i AUTOINC, period c(7), lpuid i(4), mcod c(7), sn_pol c(25), c_i c(30), ;
    fam c(25), im c(25), ot c(25), dr d, w n(1),d_u d, ds c(6), otd c(4), pcod c(10), cod n(6), tip c(1), k_u n(3), n_kd n(3),;
    s_all n(11,2), d_beg d, d_end d, codname c(40), lpuname c(40), q c(2),;
    isexp l, et c(1), osn230 c(5), s_1 n(11,2), s_2 n(11,2))

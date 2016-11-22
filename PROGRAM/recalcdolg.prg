@@ -36,6 +36,8 @@ PROCEDURE RecalcDolg
    m.lpu_id = lpuid
    m.dolg = IIF(s_pred - sum_flk -  (e_mee + e_ekmp) - s_avans - dolg_b<0, ;
    -(s_pred - sum_flk - (e_mee + e_ekmp) - s_avans - dolg_b), 0)
+   m.s_avans    = s_avans2
+   m.s_pr_avans = pr_avans2
    
    IF m.dolg == 0
     LOOP 
@@ -56,6 +58,7 @@ PROCEDURE RecalcDolg
     IF m.headid>0
      IF SEEK(m.headid, 'aisoms', 'lpuid')
       m.isdolg = aisoms.dolg_b
+*      REPLACE dolg_b WITH m.isdolg+m.dolg, s_avans WITH m.s_avans, s_pr_avans WITH m.s_pr_avans IN aisoms
       REPLACE dolg_b WITH m.isdolg+m.dolg IN aisoms
      ENDIF 
     ENDIF 

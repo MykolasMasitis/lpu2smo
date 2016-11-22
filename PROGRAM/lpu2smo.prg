@@ -85,7 +85,7 @@ PUBLIC paisoms, parc, pbase, pbin, pcommon, pout, ptempl, ptrash, pdouble, pmee,
 
 PUBLIC m.DeadDate, m.IntDate
 m.IntDate={04.09.2016}
-m.DeadDate={01.01.2017}
+m.DeadDate={31.12.2017}
 
 m.ynorm = 0
 
@@ -134,7 +134,22 @@ IF CfgBase() = -1
  =ExitProg()
 ENDIF 
 
-IF m.qcod='S6' AND DATE()>m.DeadDate
+DO CASE 
+ CASE m.qcod='S6'
+  m.DeadDate={01.02.2017}
+ CASE m.qcod='P2'
+  m.DeadDate={16.01.2017}
+ CASE m.qcod='R4'
+  m.DeadDate={23.01.2017}
+ CASE m.qcod='I1'
+  m.DeadDate={26.01.2017}
+ CASE m.qcod='S7'
+  m.DeadDate={30.01.2017}
+ OTHERWISE 
+ 
+ENDCASE 
+
+IF DATE()>m.DeadDate
  =ExitProg()
 ENDIF 
 

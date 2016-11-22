@@ -76,6 +76,20 @@ PROCEDURE CorStruct
    USE IN People
    LOOP 
   ENDIF 
+
+  IF fso.FileExists(ppdir+'\'+m.mcod+'\ho'+m.qcod+'.dbf')
+   IF OpenFile(ppdir+'\'+m.mcod+'\ho'+m.qcod, 'ho', 'excl')>0
+    IF USED('ho')
+     USE IN ho
+    ENDIF 
+   ELSE 
+    SELECT ho
+    IF FSIZE('c_i')!=30
+     ALTER table ho alter COLUMN c_i c(30)
+    ENDIF 
+    USE IN ho 
+   ENDIF 
+  ENDIF 
   
   SELECT merror
   IF FIELD('subet')!='SUBET'

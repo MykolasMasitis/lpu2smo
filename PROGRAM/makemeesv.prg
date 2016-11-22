@@ -179,7 +179,7 @@ FUNCTION MakeMEESv(lcPath, IsVisible, IsQuit, TipOfExp, TipOfPeriod)
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR qwertst (c_i c(25))
+ CREATE CURSOR qwertst (c_i c(30))
  INDEX on c_i TAG c_i
  SET ORDER TO c_i
 

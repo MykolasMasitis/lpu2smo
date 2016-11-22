@@ -72,7 +72,28 @@ PROCEDURE MakePr4
   ENDIF 
   RETURN 
  ENDIF 
- 
+ IF OpenFile(pbase+'\'+m.gcperiod+'\nsi\sprlpuxx', 'sprlpu', 'shar', 'mcod')>0
+  IF USED('sprlpu')
+   USE IN sprlpu
+  ENDIF 
+  IF USED('horlpu')
+   USE IN horlpu
+  ENDIF 
+  IF USED('tarif')
+   USE IN tarif
+  ENDIF 
+  IF USED('lputpn')
+   USE IN lputpn
+  ENDIF 
+  IF USED('pilot')
+   USE IN pilot
+  ENDIF 
+  IF USED('aisoms')
+   USE IN aisoms
+  ENDIF 
+  RETURN 
+ ENDIF 
+
  WAIT "ПРОВЕРКА ФАЙЛА PILOT..." WINDOW NOWAIT 
  SELECT pilot
  SCAN 
@@ -278,6 +299,8 @@ PROCEDURE MakePr4
    ENDIF 
 
    m.mcod2  = people.prmcod
+   m.prlpuid = IIF(SEEK(m.mcod2, 'pilot', 'mcod'), pilot.lpu_id, 0)
+
    m.paztip = TipOfPaz(m.mcod, m.mcod2) && 0 (не прикреплен),1 (прикреплен по месту обращения),2 (к пилоту),3 (не к пилоту)
    
    IF m.paztip=0
@@ -313,6 +336,7 @@ PROCEDURE MakePr4
 *      ENDIF 
 *     ENDIF 
     
+*     IF (!EMPTY(m.lpu_ord) AND m.lpu_ord=m.prlpuid) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92')))
      IF !EMPTY(m.lpu_ord) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92'))) && если есть направление или скорая помощь
 
       IF !SEEK(m.sn_pol, 'cpazguests')
@@ -346,6 +370,7 @@ PROCEDURE MakePr4
      ENDIF 
 
     CASE m.paztip = 3 && чужой непилот
+*     IF (!EMPTY(m.lpu_ord) AND m.lpu_ord=m.prlpuid) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92')))
      IF !EMPTY(m.lpu_ord) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92'))) && если есть направление или скорая помощь
 
      IF !SEEK(m.sn_pol, 'cpaznopilot')
@@ -453,6 +478,7 @@ PROCEDURE MakePr4
  USE IN lputpn 
  USE IN tarif
  USE IN horlpu
+ USE IN sprlpu
  
  m.IsAttPplOk = .T.
  m.attbase = ''

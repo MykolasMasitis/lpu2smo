@@ -107,7 +107,7 @@ PROCEDURE MakeDspFile
  ENDIF  
  IF !fso.FileExists(lcpath+'\'+dspfile+'.dbf')
   IF INLIST(m.gcperiod,'201401','201501','201601')
-  CREATE TABLE &lcpath\&dspfile (recid i, period c(6), mcod c(7), sn_pol c(17), c_i c(25), ;
+  CREATE TABLE &lcpath\&dspfile (recid i, period c(6), mcod c(7), sn_pol c(17), c_i c(30), ;
    fam c(20), im c(20), ot c(20), w n(1), dr d, ages n(2), cod n(6), rslt n(3), ;
     d_u d, s_all n(11,2), k_u2 n(3), s_all2 n(11,2), k_u2ok n(3), s_all2ok n(11,2), er c(3))
   INDEX ON period+mcod+PADL(recid,6,'0') TAG uniqq

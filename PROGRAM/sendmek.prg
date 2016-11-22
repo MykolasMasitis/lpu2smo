@@ -1,5 +1,6 @@
 FUNCTION SendMEK(lcPath)
 
+ lcPeriod = STR(tYear,4) + PADL(tMonth,2,'0')
  lcMcod  = SUBSTR(lcPath, RAT('\',lcPath)+1)
  lcLpuID = IIF(SEEK(lcMcod, 'sprlpu', 'mcod'), sprlpu.lpu_id, 0)
  m.cTO   = IIF(!EMPTY(ALLTRIM(cfrom)), ALLTRIM(cfrom), ;
@@ -92,7 +93,8 @@ FUNCTION SendMEK(lcPath)
  m.tansfile = 't_mek_' + mcod
  m.dfile    = 'd_mek_' + mcod
  m.mmid     = m.un_id+'.'+m.usrmail+'@'+m.qmail
- m.csubj    = 'OMS#'+m.gcperiod+'###1'
+* m.csubj    = 'OMS#'+m.gcperiod+'###1'
+ m.csubj    = 'OMS#'+lcPeriod+'#'+PADL(lcLpuID,4,'0')+'##1'
 
  poi = fso.CreateTextFile(lcPath + '\' + m.tansfile)
 

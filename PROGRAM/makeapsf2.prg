@@ -114,6 +114,7 @@ WITH oExcel
  .Columns(13).ColumnWidth = 10
  .Columns(14).ColumnWidth = 10
  .Columns(15).ColumnWidth = 5
+ .Columns(16).ColumnWidth = 7
 
  .Columns(02).NumberFormat = '@'
  .Columns(02).WrapText     = .t.
@@ -130,6 +131,7 @@ WITH oExcel
  .Columns(13).NumberFormat = "#,##0.00"
  .Columns(14).NumberFormat = "#,##0.00"
  .Columns(15).NumberFormat = '@'
+ .Columns(16).NumberFormat = '@'
 ENDWITH 
 
 WITH oExcel.Sheets(1)
@@ -150,7 +152,7 @@ WITH oExcel.Sheets(1)
  .cells(3,1).HorizontalAlignment=-4108
  .cells(4,1).HorizontalAlignment=-4108
  FOR nRow=1 TO 4
-  oRange = oExcel.Range(oExcel.Cells(nRow,1), oExcel.Cells(nRow,14))
+  oRange = oExcel.Range(oExcel.Cells(nRow,1), oExcel.Cells(nRow,16))
   oRange.Merge
  ENDFOR  
  
@@ -174,6 +176,7 @@ WITH oExcel.Sheets(1)
  .Cells(m.fstring,13).Value2 = 'К оплате'
  .Cells(m.fstring,14).Value2 = 'Долг на конец периода'
  .Cells(m.fstring,15).Value2 = 'Пилот'
+ .Cells(m.fstring,16).Value2 = 'ФКОД'
 
  oExcel.Range(oExcel.Cells(m.fstring-1,1), oExcel.Cells(m.fstring,1)).Merge 
  oExcel.Range(oExcel.Cells(m.fstring-1,2), oExcel.Cells(m.fstring,2)).Merge 
@@ -188,11 +191,12 @@ WITH oExcel.Sheets(1)
  oExcel.Range(oExcel.Cells(m.fstring-1,13), oExcel.Cells(m.fstring,13)).Merge 
  oExcel.Range(oExcel.Cells(m.fstring-1,14), oExcel.Cells(m.fstring,14)).Merge 
  oExcel.Range(oExcel.Cells(m.fstring-1,15), oExcel.Cells(m.fstring,15)).Merge 
+ oExcel.Range(oExcel.Cells(m.fstring-1,16), oExcel.Cells(m.fstring,16)).Merge 
  .Cells(m.fstring-1,8).Value2 = 'Сумма уменьшения счетов-фактур'
  oExcel.Range(oExcel.Cells(m.fstring-1,7), oExcel.Cells(m.fstring-1,9)).Merge 
 ENDWITH 
 
-FOR ncol=1 TO 15
+FOR ncol=1 TO 16
  WITH oExcel.Sheets(1)
   .Cells(m.fstring,ncol).Font.Size = 8
   .Cells(m.fstring,ncol).Font.Bold = .F.
@@ -203,7 +207,7 @@ FOR ncol=1 TO 15
 NEXT 
 
 m.fstring = m.fstring + 1
-FOR ncolumn=1 TO 15
+FOR ncolumn=1 TO 16
  WITH oExcel.Sheets(1)
   .cells(m.fstring,ncolumn).Value2 = STR(ncolumn,2)
   .cells(m.fstring,ncolumn).HorizontalAlignment = -4108
@@ -212,15 +216,8 @@ NEXT
 
 oExcel.Range(oExcel.Cells(m.fstring,1), oExcel.Cells(m.fstring,14)).NumberFormat='@'
 
-*m.fstring = m.fstring + 1
 m.ccokr = cokr
 m.nincokr = 1
-
-*oExcel.Sheets(1).cells(m.fstring,2).Value2 = m.cokrname
-*oRange = oExcel.Range(oExcel.Cells(m.fstring,2), oExcel.Cells(m.fstring,15))
-*oRange.Merge
-*oRange.HorizontalAlignment = -4108
-*oRange.Interior.ColorIndex = 40
 
 m.sum04 = 0
 m.sum05 = 0
@@ -244,7 +241,6 @@ m.sum11okr = 0
 m.sum12okr = 0
 m.sum13okr = 0
 
-*SCAN FOR aisoms.s_pred>0
 SCAN
  m.fstring = m.fstring + 1
  m.mcod = mcod
@@ -278,6 +274,7 @@ SCAN
    (aisoms.e_mee + aisoms.e_ekmp) - aisoms.s_avans - aisoms.dolg_b<0, -(aisoms.s_pred - aisoms.sum_flk - ;
    (aisoms.e_mee + aisoms.e_ekmp) - aisoms.s_avans - aisoms.dolg_b), 0)
   .Cells(m.fstring,15).Value2 = IIF(m.IsPilot, 'Да ', 'Нет')
+  .Cells(m.fstring,16).Value2 = fcod
  ENDWITH 
 
  m.sum04okr = m.sum04okr + aisoms.s_pred

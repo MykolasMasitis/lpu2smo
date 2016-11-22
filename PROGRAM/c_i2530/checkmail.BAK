@@ -882,6 +882,7 @@ FUNCTION MakePeople
   m.period = m.gcPeriod
   m.tipp = tip_p
   m.prmcod = IIF(SEEK(m.prik, 'sprlpu'), sprlpu.mcod, '')
+  m.prmcod = IIF(m.d_type='9', '', m.prmcod)
   RELEASE m.recid, m.d_beg, m.d_end, m.tip_p, m.s_all
   INSERT INTO People FROM MEMVAR
 *  INSERT INTO People_sv FROM MEMVAR 
@@ -902,6 +903,7 @@ FUNCTION MakeHO
  COPY TO &lcDir\ho&qcod
  USE 
  USE &lcDir\ho&qcod IN 0 ALIAS lcHOFile  EXCLUSIVE 
+ ALTER TABLE lcHOFile ALTER COLUMN c_i c(25)
  SELECT lcHOFile
  INDEX on sn_pol+c_i+PADL(cod,6,'0') TAG unik
  USE 

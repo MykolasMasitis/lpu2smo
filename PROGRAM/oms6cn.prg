@@ -322,6 +322,7 @@ FUNCTION oms6cn(lcPath, IsVisible, IsQuit)
         dimdata(2,7) = dimdata(2,7) + IIF(m.IsErr,0,m.s_all)
        ENDIF 
        IF (m.lpu_ord>0 AND m.Is02=.F.) OR (m.lpu_ord=0 AND INLIST(m.otd,'08','92') AND m.Is02=.F.)
+*       IF (m.lpu_ord>0 AND m.lpu_ord=m.prlpuid AND m.Is02=.F.) OR (m.lpu_ord=0 AND INLIST(m.otd,'08','92') AND m.Is02=.F.)
         dimdata(2,6) = dimdata(2,6) + IIF(m.IsErr,0,m.s_all)
        ENDIF 
 *      ENDIF 

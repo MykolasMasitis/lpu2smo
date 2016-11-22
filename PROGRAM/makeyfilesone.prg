@@ -142,6 +142,7 @@ FUNCTION MakeYFilesOne
 *       ENDIF 
 *      ENDIF 
       CASE TipOfPr(m.mcod, m.prmcod) = 2 && к пилоту
+*      IF (!EMPTY(m.lpu_ord) AND m.lpu_ord=m.prik) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(m.otd,'08','92')))
       IF !EMPTY(m.lpu_ord) OR (EMPTY(m.lpu_ord) AND (m.lIs02=.T. OR INLIST(SUBSTR(otd,2,2),'08','92')))
        m.f_type = 'vz' && взаимозачеты (из средств иного ЛПУ)
       ELSE 
@@ -306,6 +307,14 @@ FUNCTION MakeYFilesOne
    fso.DeleteFile(lcpath+'\'+hfile)
   ENDIF 
   IF fso.FileExists(lcpath+'\'+hofile)
+   IF OpenFile(lcpath+'\'+hofile, 'hoo', 'excl')>0
+    IF USED('')
+     USE IN hoo
+    ENDIF 
+   ELSE 
+    ALTER TABLE hoo ALTER COLUMN c_i c(30)
+    USE IN hoo 
+   ENDIF 
    ZipFile(hofile, .T.)
    fso.DeleteFile(lcpath+'\'+hofile)
   ENDIF 

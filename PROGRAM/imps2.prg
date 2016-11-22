@@ -192,7 +192,7 @@ SCAN
  
  CREATE TABLE (Talon) ;
 	(RecId i AUTOINC NEXTVALUE 1 STEP 1, ;
-	 mcod c(7), period c(6), sn_pol c(25), c_i c(25), ds c(6), ds_0 c(6),  ;
+	 mcod c(7), period c(6), sn_pol c(25), c_i c(30), ds c(6), ds_0 c(6),  ;
 	 pcod c(10), otd c(8), cod n(6), tip c(1), d_u d, ;
 	 k_u n(3), d_type c(1), s_all n(11,2), profil c(3), rslt n(3), prvs n(4), ishod n(3),;
 	 codnom c(14), kur n(5,3), ds_2 c(6), ds_3 c(6), det n(1), k2 n(5,3), tipgr c(1), ;

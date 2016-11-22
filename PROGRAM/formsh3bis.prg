@@ -214,7 +214,7 @@ PROCEDURE FormSh3Bis
   INDEX ON sn_pol TAG sn_pol 
   CREATE CURSOR curdst (sn_pol c(25))
   INDEX ON sn_pol TAG sn_pol 
-  CREATE CURSOR curst (c_i c(25))
+  CREATE CURSOR curst (c_i c(30))
   INDEX ON c_i TAG c_i
   
   CREATE CURSOR curdspdef (sn_pol c(25))
@@ -223,7 +223,7 @@ PROCEDURE FormSh3Bis
   INDEX ON sn_pol TAG sn_pol 
   CREATE CURSOR curdstdef (sn_pol c(25))
   INDEX ON sn_pol TAG sn_pol 
-  CREATE CURSOR curstdef (c_i c(25))
+  CREATE CURSOR curstdef (c_i c(30))
   INDEX ON c_i TAG c_i
   
   m.dspdefs = 0

@@ -204,11 +204,13 @@ DEFINE BAR 05 OF popS7 PROMPT 'тнплю ь-3ахя (нрвер он опнбедеммшл щйяоепрхгюл)'
 DEFINE BAR 06 OF popS7 PROMPT 'тнплю ь-4 лщщ (опхкнфемхе 8)'
 DEFINE BAR 07 OF popS7 PROMPT 'тнплю ь-4 щйло (опхкнфемхе 8)'
 DEFINE BAR 08 OF popS7 PROMPT 'тнплю ь-5 (ярюрхярхйю ямърхи он лщй)'
-DEFINE BAR 09 OF popS7 PROMPT 'тнплю ь-5ахя (ярюрхярхйю ямърхи он лщщ)'
+DEFINE BAR 09 OF popS7 PROMPT 'ярюрхярхйю ямърхи б пюгпеге лщй,лщщ,щйло'
 DEFINE BAR 10 OF popS7 PROMPT '\-'
 DEFINE BAR 11 OF popS7 PROMPT 'тнплю ь-6 (пюгдек II тнплш 1)'
 DEFINE BAR 12 OF popS7 PROMPT 'тнплю ь-7 (нрвер он жекебни щйяоепрхге)'
 DEFINE BAR 13 OF popS7 PROMPT 'тнплю ь-8'
+DEFINE BAR 14 OF popS7 PROMPT 'нярпши йнпнмюпмши яхмдпнл'
+DEFINE BAR 15 OF popS7 PROMPT 'нярпне мюпсьемхе лнгцнбнцн йпнбннапюыемхъ'
 ON SELECTION BAR 01 OF popS7 DO FormSh0
 ON SELECTION BAR 02 OF popS7 DO FormSh1
 ON SELECTION BAR 03 OF popS7 DO FormSh2
@@ -221,6 +223,8 @@ ON SELECTION BAR 09 OF popS7 DO FormSh5Bis
 ON SELECTION BAR 11 OF popS7 DO FormSh6
 ON SELECTION BAR 12 OF popS7 do RepExp7
 ON SELECTION BAR 13 OF popS7 do FormSh8
+ON SELECTION BAR 14 OF popS7 do FormSh09
+ON SELECTION BAR 15 OF popS7 do FormSh10
 
 DEFINE POPUP popS2 MARGIN RELATIVE shadow COLOR SCHEME 4
 DEFINE BAR 01 OF popS2 PROMPT 'ябндмши гю леяъж'
@@ -248,19 +252,21 @@ ON SELECTION BAR 7 OF ExpCriteria do sel50P
 
 DEFINE POPUP ExpCritNew MARGIN RELATIVE shadow COLOR SCHEME 4
 DEFINE BAR 1 OF ExpCritNew PROMPT 'керюкэмше хяундш'
-DEFINE BAR 2 OF ExpCritNew PROMPT 'онбрнпмше цняохрюкхгюжхх' SKIP 
+DEFINE BAR 2 OF ExpCritNew PROMPT 'онбрнпмше цняохрюкхгюжхх'
 DEFINE BAR 3 OF ExpCritNew PROMPT 'оепеяевемхъ бхднб ледонлных' SKIP 
 DEFINE BAR 4 OF ExpCritNew PROMPT 'нранп он опнтхкъл' SKIP 
 DEFINE BAR 5 OF ExpCritNew PROMPT '"всфхе" дхяоюмяепхгюжхх' SKIP 
 DEFINE BAR 6 OF ExpCritNew PROMPT '"всфхе" гюярпюунбюммше' SKIP 
 DEFINE BAR 7 OF ExpCritNew PROMPT 'цянохрюкхгюжхх <>50%' SKIP 
+DEFINE BAR 8 OF ExpCritNew PROMPT 'онбрнпмше напюыемхъ'
 ON SELECTION BAR 1 OF ExpCritNew do seldeadsnew
-*ON SELECTION BAR 2 OF ExpCritNew do seldblgosps
+ON SELECTION BAR 2 OF ExpCritNew do seldblgospsnew
 *ON SELECTION BAR 3 OF ExpCritNew do selcrosss
 *ON SELECTION BAR 4 OF ExpCritNew do selprofus
 *ON SELECTION BAR 5 OF ExpCritNew do seldsps
 *ON SELECTION BAR 6 OF ExpCritNew do SelGuests
 *ON SELECTION BAR 7 OF ExpCritNew do sel50P
+ON SELECTION BAR 8 OF ExpCritNew do seldblobrsnew
 
 DEFINE POPUP popBuch MARGIN RELATIVE shadow COLOR SCHEME 4
 DEFINE BAR 1  OF popBuch PROMPT 'дхттепемжхпнбюммши ондсьебни мнплюрхб'

@@ -200,10 +200,10 @@ FUNCTION OneSvAct(m.paraexp)
  DO CASE 
   CASE m.TipOfExp = '2'
    m.podvid='0'
-   m.aktname='Акт плановой медико-экономичекой экспертизы №'
+   m.aktname='Акт плановой медико-экономической экспертизы №'
   CASE m.TipOfExp = '3'
    m.podvid='1'
-   m.aktname='Акт целевой медико-экономичекой экспертизы №'
+   m.aktname='Акт целевой медико-экономической экспертизы №'
   CASE m.TipOfExp = '4'
    m.podvid='0'
    m.aktname='Сводный акт плановой ЭКМП №'
@@ -215,10 +215,10 @@ FUNCTION OneSvAct(m.paraexp)
    m.aktname='Сводный акт тематической ЭКМП №'
   CASE m.TipOfExp = '7'
    m.podvid='Т'
-   m.aktname='Акт тематической медико-экономичекой экспертизы №'
+   m.aktname='Акт тематической медико-экономической экспертизы №'
   CASE m.TipOfExp = '8'
    m.podvid='Т'
-   m.aktname='Акт медико-экономичекой экспертизы по жалобе №'
+   m.aktname='Акт медико-экономической экспертизы по жалобе №'
   CASE m.TipOfExp = '9'
    m.podvid='Т'
    m.aktname='Сводный акт ЭКМП по жалобе №'
@@ -252,7 +252,7 @@ FUNCTION OneSvAct(m.paraexp)
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR qwertst (c_i c(25))
+ CREATE CURSOR qwertst (c_i c(30))
  INDEX on c_i TAG c_i
  SET ORDER TO c_i
 
@@ -264,10 +264,10 @@ FUNCTION OneSvAct(m.paraexp)
  INDEX on sn_pol TAG sn_pol
  SET ORDER TO sn_pol
 
- CREATE CURSOR curdata (nrec n(5), sn_pol c(25), c_i c(25), d_beg d, d_end d, ds c(6), cod n(6), s_all n(11,2), ;
+ CREATE CURSOR curdata (nrec n(5), sn_pol c(25), c_i c(30), d_beg d, d_end d, ds c(6), cod n(6), s_all n(11,2), ;
   osn230 c(5), er_c c(3), delta n(11,2), straf n(11,2), cmnt c(50))
 
- CREATE CURSOR curdata2 (nrec2 n(5), sn_pol c(25), c_i c(25), d_beg d, d_end d, ds c(6), cod n(6), s_all n(11,2), ;
+ CREATE CURSOR curdata2 (nrec2 n(5), sn_pol c(25), c_i c(30), d_beg d, d_end d, ds c(6), cod n(6), s_all n(11,2), ;
   osn230 c(5), er_c c(3), delta n(11,2), koeff n(3,2), straf n(11,2), cmnt c(50))
  SELECT curdata2
  INDEX on sn_pol TAG sn_pol
@@ -281,6 +281,9 @@ FUNCTION OneSvAct(m.paraexp)
  SCAN 
   IF !(et=m.TipOfExp AND docexp=m.docexp)
    LOOP 
+  ENDIF 
+  IF LEFT(UPPER(err_mee),2) = 'W0'
+   REPLACE s_1 WITH 0, s_2 WITH 0
   ENDIF 
 
   m.sn_pol = talon.sn_pol
@@ -302,7 +305,7 @@ FUNCTION OneSvAct(m.paraexp)
    m.checked_dst = m.checked_dst + 1
   ENDIF 
    
-  IF (IsMes(m.cod) OR IsVMP(m.cod)) AND !SEEK(m.c_i, 'qwertst')
+  IF (IsMes(m.cod) OR IsVMP(m.cod) OR Is02(m.cod)) AND !SEEK(m.c_i, 'qwertst')
    INSERT INTO qwertst (c_i) VALUES (m.c_i)
    m.checked_st = m.checked_st + 1
   ENDIF 

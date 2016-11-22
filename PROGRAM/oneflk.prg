@@ -670,6 +670,14 @@ FUNCTION OneFlk(ppath)
 *      InsErrorSV(m.mcod, 'S', 'H8A', m.recid)
       m.s_flk = m.s_flk + IIF(rval==.T., s_all, 0)
      ENDIF 
+     m.cod = cod
+     m.ds = ds
+     IF (LEFT(m.ds,1)='Z' AND !INLIST(m.ds,'Z13.8','Z01.7','Z20','Z34','Z35')) AND INLIST(FLOOR(m.cod/1000),25,26,27,28,29,30,125,126,127,128,129,130)
+      m.recid = recid
+      rval = InsError('S', 'H8A', m.recid)
+*      InsErrorSV(m.mcod, 'S', 'H8A', m.recid)
+      m.s_flk = m.s_flk + IIF(rval==.T., s_all, 0)
+     ENDIF 
     ENDIF
    ENDIF 
 
@@ -1356,49 +1364,59 @@ FUNCTION OneFlk(ppath)
    ENDIF 
 
    IF M.D2A == .T.
-*    IF !SEEK(m.cod, 'dspcodes')
-*     LOOP 
-*    ELSE 
-*     m.last = dspcodes.last
-*    ENDIF 
+    m.cod = cod
+    m.dsptip = IIF(SEEK(m.cod,'dspcodes'), dspcodes.tip, 0)
+
+    IF m.dsptip > 0
+    
     DO CASE 
-     CASE BETWEEN(cod, 1900, 1905) && Диспансеризция взрослых
+     CASE m.dsptip = 1  && Диспансеризция взрослых, tip=1
       m.lastt = 12*3
-     CASE BETWEEN(cod, 101929, 101932) && Диспансеризация детей
-      m.lastt = 12
-     CASE BETWEEN(cod, 1906, 1909) && Профосмотры взрослых
+     CASE m.dsptip = 2 && Профосмотры взрослых, tip=2
       m.lastt = 12*2
-     CASE BETWEEN(cod,101933,101945) OR cod=101951 && Профосмотры детей
+     CASE m.dsptip = 3 && Диспансеризация детей, tip=3
       m.lastt = 12
-     CASE BETWEEN(cod,101946,101948) && Предварительные 
+     CASE m.dsptip = 4 && Профосмотры детей, tip=4
+      m.lastt = IIF(m.qcod != 'P2', 12, 3)
+     CASE m.dsptip = 5 && Предварительные, tip=5
       m.lastt = 3
-     CASE BETWEEN(cod,101949,101950) && Периодические
+     CASE m.dsptip = 6 && Периодические, tip=6
       m.lastt = 3
-*      MESSAGEBOX('101949',0+64,'')
      OTHERWISE 
       m.lastt = 0
     ENDCASE 
+
     IF BETWEEN(cod,101933,101945) OR cod=101951
      FOR m.varcod = 101927 TO 101932
       m.perem = m.mcod+LEFT(sn_pol,17)+PADL(m.varcod,6,'0')
-      IF SEEK(m.perem, 'dspyear')
-       m.recid = recid
-       rval = InsError('S', 'D2A', m.recid)
-       m.s_flk = m.s_flk + IIF(rval==.T., s_all, 0)
+      IF m.qcod!='P2'
+       IF SEEK(m.perem, 'dspyear')
+        m.recid = recid
+        rval = InsError('S', 'D2A', m.recid)
+        m.s_flk = m.s_flk + IIF(rval==.T., s_all, 0)
+       ENDIF 
+      ELSE
+       IF SEEK(m.perem, 'dspp') AND (d_u - dspp.d_u)/30<m.lastt
+        m.recid = recid
+        rval = InsError('S', 'D2A', m.recid)
+        m.s_flk = m.s_flk + IIF(rval==.T., s_all, 0)
+       ENDIF 
       ENDIF 
      ENDFOR 
     ENDIF 
+
     IF m.lastt>0
      m.perem = m.mcod+LEFT(sn_pol,17)+PADL(cod,6,'0')
-*     MESSAGEBOX(m.perem,0+64,'')
      IF SEEK(m.perem, 'dspp') AND (d_u - dspp.d_u)/30<m.lastt
-*      MESSAGEBOX('D2A detected!',0+64,m.mcod)
       m.recid = recid
       rval = InsError('S', 'D2A', m.recid)
       m.s_flk = m.s_flk + IIF(rval==.T., s_all, 0)
      ENDIF 
     ENDIF 
-   ENDIF 
+    
+   ENDIF && IF m.dsptip>0
+   
+   ENDIF && IF M.D2A == .T.
 
    IF M.NUA == .T.
     SET ORDER TO ncod IN sovmno
